@@ -1,0 +1,94 @@
+{
+ "rule": "Each milestone's definition of done is set when the milestone is defined (owner, 2026-10-13). Only brain changes it, only when very necessary, with a reason logged here and told to the owner. team_check.py flags any dod/nice label that differs from this file.",
+ "milestones": {
+  "pg-a18q": {
+   "set": "2026-10-13",
+   "approved": "owner on the panel, ask 04430d: \"A: those 3; iteration = grill rounds on your built apps, fixes go to beads\"",
+   "dod": [
+    "pg-a18q.29",
+    "pg-a18q.10",
+    "pg-a18q.26",
+    "pg-a18q.27",
+    "pg-a18q.28",
+    "pg-a18q.17",
+    "pg-a18q.18",
+    "pg-a18q.19",
+    "pg-a18q.20",
+    "pg-a18q.21",
+    "pg-a18q.22",
+    "pg-a18q.23",
+    "pg-a18q.30",
+    "pg-a18q.31",
+    "pg-a18q.32",
+    "pg-a18q.33",
+    "pg-a18q.34",
+    "pg-a18q.35",
+    "pg-a18q.36",
+    "pg-a18q.41",
+    "pg-a18q.42",
+    "pg-a18q.43",
+    "pg-a18q.44",
+    "pg-a18q.45",
+    "pg-a18q.48",
+    "pg-a18q.51"
+   ],
+   "changes": [
+    {
+     "date": "2026-10-13",
+     "bead": "pg-a18q.30",
+     "change": "(the owner's words)"
+    },
+    {
+     "date": "2026-10-13",
+     "bead": "pg-a18q.31-.36",
+     "change": "adds app iteration (Improve this app, grill-style questions with a real-app preview) and the interview preview the engine picks when it helps, production-ready and public at M4's end",
+     "why": "Sample why 1",
+     "owner": "grill 20261013-143550 q6 B: \"(the owner's words)\""
+    },
+    {
+     "date": "2026-10-13",
+     "bead": "pg-a18q.30",
+     "change": "the owner approves their finance app (was: 4 of their 5 own apps)",
+     "why": "Sample why 2",
+     "owner": "ask a2602d: \"si, hagamos eso\""
+    },
+    {
+     "date": "2026-10-14",
+     "bead": "pg-a18q.41-.43",
+     "change": "added: backend, iOS and Android parts of the interview preview, split out of scope the owner already put in M4 (.31-.36); no new criterion",
+     "why": "Sample why 3",
+     "owner": "grill 20261013-143550 q6 B: \"(the owner's words)\"; if ask d3a7cb comes back C (off), these three leave the dod"
+    },
+    {
+     "date": "2026-10-14",
+     "bead": "pg-a18q.44-.45",
+     "change": "added: iOS and Android versions follow-up (basedOn, no Undo, 'from version N', 'go to version N' confirm) per docs/specs/app-versions.md at e4589a3c",
+     "why": "Sample why 4",
+     "owner": "grill 20261014-064401 q4 C and q5 A: \"(the owner's words)\""
+    },
+    {
+     "date": "2026-10-14",
+     "bead": "pg-a18q.48",
+     "change": "adds design's copy rows for the versions tree (en, es); .44 and .45 depend on it",
+     "why": "Sample why 5",
+     "owner": "grill 20261014-064401 q4 C, q5 A"
+    },
+    {
+     "date": "2026-10-15",
+     "bead": "pg-a18q.51",
+     "change": "added: the live sketch of the app under Tu app while it is made (grill 20261014-233545 q3 A)",
+     "why": "Sample why 6",
+     "owner": "in brain's window: \"make this part of M4\""
+    },
+    {
+     "date": "2026-10-15",
+     "bead": "pg-a18q.35",
+     "change": "reopened: closed in error on 'pushed', its done-when (the owner uses it on the iPhone) was not met; the iOS app-list entries were missing",
+     "why": "Sample why 7",
+     "owner": "in brain's window: \"(the owner's words)\""
+    }
+   ],
+   "bar": "pg-a18q.29"
+  }
+ }
+}

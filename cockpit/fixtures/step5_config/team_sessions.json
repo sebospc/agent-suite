@@ -1,0 +1,7 @@
+{
+  "_note": "The team, from projectapp docs/WORKFLOW.md. Sessions run as agent-<role> (team dependency 5). cockpit: shown and managed by the autopilot (the owner, 2026-10-17, ask 09670e).",
+  "roles": ["brain", "coordinator", "reviewer", "reviewer-2", "ai", "ios", "android", "format", "backend", "design", "shaping-lead", "investigator", "cockpit", "agent-ddp"],
+  "coordinating": ["brain", "coordinator", "reviewer", "reviewer-2", "agent-ddp"],
+  "projects": {"agent-ddp": "~/Documents/agent-ddp"},
+  "known_holders": ["owner", "claude-cloud"]
+}

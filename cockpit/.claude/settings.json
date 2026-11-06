@@ -1,0 +1,124 @@
+{
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "impeccable": {
+      "source": {
+        "source": "github",
+        "repo": "pbakaus/impeccable"
+      }
+    },
+    "typesafe-ai": {
+      "source": {
+        "source": "github",
+        "repo": "typesafe-ai/skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "caveman@caveman": true,
+    "ponytail@ponytail": true,
+    "impeccable@impeccable": true,
+    "typesafe@typesafe-ai": true
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/tools/cloud_setup.sh\""
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \"$HOME/.cockpit/context-mode/node_modules/context-mode\" ] || exit 0; CLAUDE_CONFIG_DIR=\"$HOME/.cockpit/context-mode/home\" CLAUDE_PLUGIN_ROOT=\"$HOME/.cockpit/context-mode/node_modules/context-mode\" node \"$HOME/.cockpit/context-mode/node_modules/context-mode/hooks/sessionstart.mjs\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PATH=\"$HOME/.local/bin:$PATH\" rtk hook claude 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|WebFetch|Read|Grep|Agent|mcp__",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \"$HOME/.cockpit/context-mode/node_modules/context-mode\" ] || exit 0; CLAUDE_CONFIG_DIR=\"$HOME/.cockpit/context-mode/home\" CLAUDE_PLUGIN_ROOT=\"$HOME/.cockpit/context-mode/node_modules/context-mode\" node \"$HOME/.cockpit/context-mode/node_modules/context-mode/hooks/pretooluse.mjs\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Read|Write|Edit|NotebookEdit|Glob|Grep|TodoWrite|TaskCreate|TaskUpdate|EnterPlanMode|ExitPlanMode|Skill|Agent|AskUserQuestion|EnterWorktree|mcp__",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \"$HOME/.cockpit/context-mode/node_modules/context-mode\" ] || exit 0; CLAUDE_CONFIG_DIR=\"$HOME/.cockpit/context-mode/home\" CLAUDE_PLUGIN_ROOT=\"$HOME/.cockpit/context-mode/node_modules/context-mode\" node \"$HOME/.cockpit/context-mode/node_modules/context-mode/hooks/posttooluse.mjs\""
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \"$HOME/.cockpit/context-mode/node_modules/context-mode\" ] || exit 0; CLAUDE_CONFIG_DIR=\"$HOME/.cockpit/context-mode/home\" CLAUDE_PLUGIN_ROOT=\"$HOME/.cockpit/context-mode/node_modules/context-mode\" node \"$HOME/.cockpit/context-mode/node_modules/context-mode/hooks/precompact.mjs\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \"$HOME/.cockpit/context-mode/node_modules/context-mode\" ] || exit 0; CLAUDE_CONFIG_DIR=\"$HOME/.cockpit/context-mode/home\" CLAUDE_PLUGIN_ROOT=\"$HOME/.cockpit/context-mode/node_modules/context-mode\" node \"$HOME/.cockpit/context-mode/node_modules/context-mode/hooks/userpromptsubmit.mjs\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d \"$HOME/.cockpit/context-mode/node_modules/context-mode\" ] || exit 0; CLAUDE_CONFIG_DIR=\"$HOME/.cockpit/context-mode/home\" CLAUDE_PLUGIN_ROOT=\"$HOME/.cockpit/context-mode/node_modules/context-mode\" node \"$HOME/.cockpit/context-mode/node_modules/context-mode/hooks/stop.mjs\""
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "mcp__plugin_context-mode_context-mode__ctx_insight",
+      "mcp__plugin_context-mode_context-mode__ctx_upgrade"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "plugin_context-mode_context-mode"
+  ]
+}

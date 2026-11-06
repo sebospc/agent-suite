@@ -1,0 +1,24 @@
+{
+ "pid": 65195,
+ "sessionId": "c4624776-893d-4d31-b16f-b3654f35e737",
+ "cwd": "/Users/me/Documents/project",
+ "startedAt": 1792093948764,
+ "procStart": "Thu Oct 15 19:52:24 2026",
+ "version": "2.1.301",
+ "peerProtocol": 1,
+ "peerFeatures": [
+  "notify_idle",
+  "reply_across_default_dirs",
+  "artifact_yield"
+ ],
+ "kind": "interactive",
+ "entrypoint": "cli",
+ "pidDomain": "darwin",
+ "messagingSocketPath": "/tmp/cc-socks/65195.sock",
+ "name": "old-b9",
+ "nameSource": "derived",
+ "nameSince": 1792093948764,
+ "updatedAt": 1792154590471,
+ "status": "busy",
+ "statusUpdatedAt": 1792154590471
+}

@@ -1,0 +1,72 @@
+{
+ "schemaVersion": 1,
+ "activeAccountNumber": 1,
+ "accounts": [
+  {
+   "number": 1,
+   "email": "user@example.com",
+   "organizationName": "Example Org 1",
+   "organizationUuid": "00000000-0000-4000-8000-000000000001",
+   "isOrganization": true,
+   "active": true,
+   "usageStatus": "no_credentials",
+   "usage": null,
+   "lastGoodUsage": {
+    "fiveHour": {
+     "pct": 0.0
+    },
+    "sevenDay": {
+     "pct": 100.0,
+     "resetsAt": "2026-10-19T03:59:59.943583+00:00",
+     "countdown": "2d 15h",
+     "clock": "Oct 18 22:59",
+     "expectedPct": 56.6,
+     "aheadOfPace": true,
+     "projectedExhaustionAt": "2026-10-16T03:02:08Z",
+     "willLastToReset": false
+    },
+    "scoped": [
+     {
+      "pct": 0.0,
+      "resetsAt": "2026-10-19T04:00:00+00:00",
+      "countdown": "2d 15h",
+      "clock": "Oct 18 23:00",
+      "expectedPct": 56.6,
+      "aheadOfPace": false,
+      "willLastToReset": true,
+      "name": "Fable"
+     }
+    ]
+   },
+   "lastGoodFetchedAt": "2026-10-16T03:02:08Z",
+   "lastGoodAgeSeconds": 34911.0
+  },
+  {
+   "number": 2,
+   "email": "user@example.com",
+   "organizationName": "Example Org 2",
+   "organizationUuid": "00000000-0000-4000-8000-000000000002",
+   "isOrganization": true,
+   "active": false,
+   "usageStatus": "relogin_required",
+   "usage": null,
+   "disabled": true,
+   "lastGoodUsage": {
+    "fiveHour": {
+     "pct": 85.0,
+     "resetsAt": "2026-10-03T09:09:59.737319+00:00",
+     "countdown": "0m",
+     "clock": "Oct 3 04:09"
+    },
+    "sevenDay": {
+     "pct": 0.0,
+     "resetsAt": "2026-10-10T07:00:00+00:00",
+     "countdown": "0m",
+     "clock": "Oct 10 02:00"
+    }
+   },
+   "lastGoodFetchedAt": "2026-10-03T07:28:13Z",
+   "lastGoodAgeSeconds": 1142146.1
+  }
+ ]
+}

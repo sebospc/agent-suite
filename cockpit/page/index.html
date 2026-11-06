@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500&amp;family=Atkinson+Hyperlegible+Next:wght@400;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/cockpit.css">
+</head>
+<body>
+<div class="app">
+
+<header>
+  <div class="head-line">
+    <h1>Cockpit</h1>
+    <span class="dim mono" id="read-time">reading...</span>
+    <button class="link amber" id="sources-toggle" hidden aria-expanded="false" aria-controls="sources"></button>
+    <button class="link" id="pending-toggle" hidden aria-expanded="false" aria-controls="sources"></button>
+    <button class="link amber" id="prices-toggle" hidden aria-expanded="false" aria-controls="sources"></button>
+    <button class="btn pause" id="pause-team" aria-pressed="false">Pause the team</button>
+  </div>
+  <ul class="sources" id="sources" hidden></ul>
+  <div class="paused" id="paused" role="status" hidden></div>
+  <div class="staged-bar" id="staged" role="region" aria-label="Staged answers and actions" aria-live="polite" hidden></div>
+</header>
+
+<!-- Two columns, each scrolls by itself, so the page itself never scrolls on a desktop (the owner, 2026-10-16). -->
+<main class="columns">
+  <div class="column" id="col-left">
+    <section class="box" id="box-asks" aria-labelledby="h-asks"></section>
+    <section class="box" id="box-milestone" aria-labelledby="h-milestone"></section>
+  </div>
+  <div class="column" id="col-right">
+    <section class="box" id="box-health" aria-labelledby="h-health"></section>
+    <section class="box" id="box-sessions" aria-labelledby="h-sessions"></section>
+    <section class="box" id="box-accounts" aria-labelledby="h-accounts"></section>
+    <section class="box" id="box-jobs" aria-labelledby="h-jobs"></section>
+  </div>
+</main>
+
+</div>
+<dialog id="bead-dialog" aria-labelledby="bead-title"></dialog>
+<script src="/cockpit.js"></script>
+<script src="/layout.js"></script>
+<script src="/sections.js"></script>
+<script src="/tokens_jobs.js"></script>
+<script src="/health.js"></script>
+<script src="/bead.js"></script>
+<script src="/staged.js"></script>
+</body>
+</html>

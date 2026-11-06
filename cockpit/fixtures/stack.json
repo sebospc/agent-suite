@@ -1,0 +1,82 @@
+{
+ "base": "a82bc5ea",
+ "ref": "refs/heads/stack-ai",
+ "gate": "C120 gate running on 68d356e6 (covers C116-C120; C116-only gate stopped)",
+ "commits": [
+  {
+   "c": "C89",
+   "sha": "c975fcf0",
+   "status": "ygoq.21 v1, reviewer verified"
+  },
+  {
+   "c": "C90",
+   "sha": "fe084abd",
+   "status": "ygoq.22 v2"
+  },
+  {
+   "c": "C91",
+   "sha": "c540be70",
+   "status": "y6it v2"
+  }
+ ],
+ "held": [
+  {
+   "id": "pg-pgnt deploy",
+   "owner": "old-design",
+   "sha": "C63",
+   "waits": "deploy + UNSUBSCRIBE_KEY need owner yes, not asked (not blocking goal A)"
+  },
+  {
+   "id": "pg-xrqi joint",
+   "owner": "brain+design",
+   "sha": "spec v2 08a66800 + copy v2 a89c63f3",
+   "waits": "reviewer on spec v2; then one commit on top"
+  }
+ ],
+ "devices": [
+  {
+   "device": "5554+sim",
+   "owner": "old-brain",
+   "task": "gate C113 ff08cef8",
+   "until": "gate ends"
+  }
+ ],
+ "runs": [
+  {
+   "owner": "old-ai",
+   "task": "sa46 live n21+n18 x2 on ff08cef8+v5",
+   "account": 19,
+   "waits": "running; then weekly ygoq.4 kit v4"
+  },
+  {
+   "sha": "b8422e3d",
+   "step": "android",
+   "result": "debug 239/0/4; minified 242/1/4, PinnedQuickEntryScrollTest timeout under load 250, class rerun minified 3/0/0",
+   "at": "2026-10-12 14:45"
+  }
+ ],
+ "plan": "landing order checked by ai on C90: +ygoq.8 v2 +8ke v1 +ygoq.5 v2 apply clean, ai 835 / backend 170, pins OK, tree c6765152. 8ke step2: scratchpad/step2/step2.sh <acct> <commit>, bound 730 recipes + 410 facets, go after ygoq.8+8ke land; next weekly: run ai scratchpad/picks/picks_report.py <out> <out --no-confirm-picks> (no-picks arm = same cassette, builds only, ~40 calls)",
+ "neverPush": [
+  "624b8a4b",
+  "05408a50",
+  "52c9a130",
+  "54848d7e",
+  "a807c9d5",
+  "2a52733d",
+  "e55f7d38",
+  "3a04f619",
+  "78f93c34",
+  "8ac4a15e268d5013ee9b25893b13cd1aa56a55d9",
+  "2f51cf458cf6e716eb2806fe5f35f46ba66fe14b",
+  "52a8dbecc678d3aa2f186d203b8e0e79b116ecce",
+  "221d987ca8fb19c17aa3721d5066dd23e49bc516",
+  "a04bd16aae97a8343cf623413189b339507df900",
+  "06720922743c5d95f5fe27c920724d35e5bfe19a",
+  "8f719515",
+  "7e360d02 (AI-pgfuks patch, superseded by landing ai v1)",
+  "ca49ff56 (C213 wrong wording)",
+  "303d2322 (C218 wrong wording)",
+  "f92b943e (C219 wrong wording)"
+ ],
+ "pushed": "db0dc23606fa8a17f6152c87e6f8a0320230589d"
+}

@@ -1,0 +1,85 @@
+{
+ "id": "cli:pane:list",
+ "result": {
+  "panes": [
+   {
+    "agent": "claude",
+    "agent_session": {
+     "agent": "claude",
+     "kind": "id",
+     "source": "herdr:claude",
+     "value": "c4624776-893d-4d31-b16f-b3654f35e737"
+    },
+    "agent_status": "working",
+    "cwd": "/Users/me/Documents/project",
+    "focused": true,
+    "foreground_cwd": "/Users/me/Documents/project",
+    "label": "old-brain",
+    "pane_id": "w4:p3",
+    "revision": 151,
+    "scroll": {
+     "max_offset_from_bottom": 0,
+     "offset_from_bottom": 0,
+     "viewport_rows": 58
+    },
+    "tab_id": "w4:t3",
+    "terminal_id": "term_65d0ff8516ebf8",
+    "terminal_title": "◑ old-brain",
+    "terminal_title_stripped": "old-brain",
+    "workspace_id": "w4"
+   },
+   {
+    "agent_session": {
+     "agent": "claude",
+     "kind": "id",
+     "source": "herdr:claude",
+     "value": "30199769-d1c5-40f1-9d6d-a84af1230c9a"
+    },
+    "agent_status": "unknown",
+    "cwd": "/Users/me/Documents/project",
+    "focused": false,
+    "foreground_cwd": "/Users/me/Documents/project",
+    "label": "old-coordinator",
+    "pane_id": "w4:p1Q",
+    "revision": 20,
+    "scroll": {
+     "max_offset_from_bottom": 0,
+     "offset_from_bottom": 0,
+     "viewport_rows": 58
+    },
+    "tab_id": "w4:tJ",
+    "terminal_id": "term_65dbd821f32a947",
+    "terminal_title": "✳ old-coordinator",
+    "terminal_title_stripped": "old-coordinator",
+    "workspace_id": "w4"
+   },
+   {
+    "agent": "claude",
+    "agent_session": {
+     "agent": "claude",
+     "kind": "id",
+     "source": "herdr:claude",
+     "value": "df6ca9a8-f3fb-4ac8-aada-3ecbbe1cf8a9"
+    },
+    "agent_status": "idle",
+    "cwd": "/Users/me/Documents/project",
+    "focused": false,
+    "foreground_cwd": "/Users/me/Documents/project",
+    "label": "old-android",
+    "pane_id": "w4:p7",
+    "revision": 89,
+    "scroll": {
+     "max_offset_from_bottom": 0,
+     "offset_from_bottom": 0,
+     "viewport_rows": 27
+    },
+    "tab_id": "w4:t5",
+    "terminal_id": "term_65d0ff8516ec69",
+    "terminal_title": "✳ old-android",
+    "terminal_title_stripped": "old-android",
+    "workspace_id": "w4"
+   }
+  ],
+  "type": "pane_list"
+ }
+}

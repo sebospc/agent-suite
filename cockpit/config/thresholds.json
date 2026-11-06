@@ -1,0 +1,212 @@
+{
+  "_note": "Every threshold the cockpit uses. status: provisional (starting value, the owner sets it from docs/CALIBRATION.md), set (the owner's number, with the date in source), fixed (a fact, not a choice).",
+  "silent_bead_hours": {
+    "value": 12,
+    "status": "set",
+    "source": "owner 2026-10-16: a mark, never a warning or notification (\"(the owner's words)\"); 12 h from docs/CALIBRATION.md; counts the holder's turns as work"
+  },
+  "beads_per_task_session": {
+    "value": 1,
+    "status": "set",
+    "source": "owner 2026-10-16: \"eso debe ser de a 1 tarea\""
+  },
+  "blocker_ask_hours": {
+    "value": 0,
+    "status": "set",
+    "source": "owner 2026-10-16: show a blocker ask at once (\"yes of course\"); the asking session waits for the answer (panel 4c9041)"
+  },
+  "haiku_step_tokens": {
+    "value": 100000,
+    "status": "fixed",
+    "source": "Anthropic pricing: Haiku 5.5 bills the whole request 5x above 100k prompt tokens"
+  },
+  "account_5h_mark_pct": {
+    "value": 85,
+    "status": "fixed",
+    "source": "the balancer's USAGE_LIMIT (pick_account.py); reread when it changes"
+  },
+  "account_7d_mark_pct": {
+    "value": 95,
+    "status": "fixed",
+    "source": "the balancer's WEEKLY_USAGE_LIMIT (pick_account.py)"
+  },
+  "autopilot_idle_minutes": {
+    "value": 10,
+    "status": "provisional",
+    "source": "docs/REQUIREMENTS.md autopilot rule 1 (phase 3); since pg-o1sq step 3 only for a session whose cache life is not known"
+  },
+  "keep_warm_probe_on": {
+    "value": true,
+    "status": "set",
+    "source": "owner 2026-10-22, panel ask 4cf900 \"A: yes, turn it on\"; when true the autopilot types one short prompt into an idle session near its cache's expiry, up to the break-even count, and only at or under probe_max_spot_multiple of its sweet spot (DECISIONS 2026-10-22 keep-warm rules)"
+  },
+  "probe_max_spot_multiple": {
+    "value": 1.75,
+    "status": "set",
+    "source": "owner 2026-10-22 (DECISIONS keep-warm rules, e19cd7): no cache probe above this multiple of the session's sweet spot; used by the idle-cost replay and column, no probe is sent yet"
+  },
+  "probe_output_tokens": {
+    "value": 20,
+    "status": "provisional",
+    "source": "heuristic: a fixed short probe message answered in a few words; replace with the measured output of the first real probes"
+  },
+  "cache_expiry_margin_minutes": {
+    "value": 5,
+    "status": "provisional",
+    "source": "design pg-o1sq Q8 rows 5-7: with no TASK coming, compact this long before the cache expires (at most half a 5-minute cache); the 30 s read and the compaction's own turn fit inside it; calibrate from actions.jsonl compactions that landed after expiry",
+    "range": {
+      "min": 2,
+      "max": 15,
+      "max_weekly_change_pct": 20
+    }
+  },
+  "relaunch_min_saving_pct": {
+    "value": 5,
+    "status": "provisional",
+    "source": "docs/COMPACTION.md rule 4"
+  },
+  "refresh_seconds": {
+    "value": 30,
+    "status": "set",
+    "source": "docs/ARCHITECTURE.md; owner 2026-10-16: \"keep all three\""
+  },
+  "messages_per_bead_floor": {
+    "value": 5,
+    "status": "provisional",
+    "source": "docs/REQUIREMENTS.md process line (phase 3)"
+  },
+  "quality_cap_tokens": {
+    "value": null,
+    "status": "set",
+    "source": "docs/COMPACTION.md: W_q, no cap until the owner sets one; owner 2026-10-16: \"keep all three\""
+  },
+  "price_max_age_days": {
+    "value": 90,
+    "status": "provisional",
+    "source": "owner 2026-10-16: mark B, prices marked after 90 days or when a model has no price"
+  },
+  "turn_end_max_tokens": {
+    "value": 150000,
+    "status": "provisional",
+    "source": "panels f68cd6 to b31e2b (2026-10-22): an Opus or Sonnet session is compacted at a finished turn once over its sweet spot, at most this; the replay of 7 days of transcripts put the cost bottom at 150k for 9 of 12 sessions (flat to 200k), -$39.68 a day against what happened"
+  },
+  "turn_end_gap_seconds": {
+    "value": 20,
+    "status": "provisional",
+    "source": "panels f68cd6 to b31e2b: idle this long after a request ends a turn; tool calls follow each other in a few seconds"
+  },
+  "turn_end_window_minutes": {
+    "value": 10,
+    "status": "provisional",
+    "source": "how long after a turn ends the turn-end compaction may still go out (a read held by a waiting control or a busy pane); later the expiry rule decides"
+  },
+  "haiku_guard_pct": {
+    "value": 90,
+    "status": "provisional",
+    "source": "the line a TASK arriving at a Haiku session is decided against (task_start); the idle guard rule that compacted at it was removed 2026-10-22 (panels f68cd6 to b31e2b), Claude Code's own window compacts Haiku under the step"
+  },
+  "hold_band_min_reviews": {
+    "value": 10,
+    "status": "provisional",
+    "source": "owner decision 767efc (pg-yn73): a context band with fewer reviews than this reads \"not enough data\"; the builder's starting number, set from how many reviews a band collects in 14 days"
+  },
+  "autopilot_on": {
+    "value": true,
+    "status": "set",
+    "source": "owner 2026-10-16: the autopilot runs by itself (\"debe ser autobalanceado\") and Resume turns it on (\"el autopilot automaticamente se pone true cuando le de a resume\"): it stays true and the pause file is its switch, since a paused team gets nothing typed. false stops it for good, with no switch on the page"
+  },
+  "high_context_tokens": {
+    "value": 150000,
+    "status": "provisional",
+    "source": "docs/BRIEF.md: measured Oct 15, about 70% of token use happens above 150k context"
+  },
+  "tokens_day_over_avg_pct": {
+    "value": 20,
+    "status": "provisional",
+    "source": "design chat LI11: a day 20% over the 7-day average lights the Tokens light"
+  },
+  "tokens_per_bead_rise_pct": {
+    "value": 20,
+    "status": "provisional",
+    "source": "design chat LI13: tokens per landed bead rising week over week"
+  },
+  "duplicate_window_minutes": {
+    "value": 10,
+    "status": "provisional",
+    "source": "design chat LI9: the same message body received again within this window is a duplicate (the project's WORKFLOW: one event, one message, one recipient)"
+  },
+  "jev_yes_probability": {
+    "value": 0.6,
+    "status": "provisional",
+    "source": "design chat J1: a Jev probability at or above this counts as yes in the fixed table; judged by the Jev record",
+    "range": {
+      "min": 0.4,
+      "max": 0.85,
+      "max_weekly_change_pct": 10
+    }
+  },
+  "start_load_share_pct": {
+    "value": 40,
+    "status": "provisional",
+    "source": "owner 2026-10-16: show what CLAUDE.md and the rest cost at session start; amber when the start load is this share of an average turn or more; calibrated from the transcripts"
+  },
+  "disk_min_free_gb": {
+    "value": 30,
+    "status": "set",
+    "source": "the project's docs/WORKFLOW.md \"Disk\" and tools/check_disk.sh: under 30 GB free no build, test run or device boot starts"
+  },
+  "disk_watch_free_gb": {
+    "value": 45,
+    "status": "provisional",
+    "source": "a warning before the team's 30 GB floor stops builds; calibrated from how fast free space falls"
+  },
+  "doc_lag_days": {
+    "value": 7,
+    "status": "provisional",
+    "source": "pg-o1sq design Q13 'docs older than the code they describe': a doc a week behind a file it names is worth a look; set from how often the row lights once it has run a week"
+  },
+  "start_load_rise_pct": {
+    "value": 20,
+    "status": "provisional",
+    "source": "owner 2026-10-16: each role's start-load limit comes from its own usual over 14 days; the bar turns orange this much above it"
+  },
+  "recovery_idle_gap_minutes": {
+    "value": 10,
+    "status": "provisional",
+    "source": "docs/COMPACTION.md recovery cost R: a request after a longer gap is a new prompt or a cold cache, not recovery; same start as autopilot_idle_minutes, calibrate from the gaps after compactions",
+    "range": {
+      "min": 2,
+      "max": 30,
+      "max_weekly_change_pct": 20
+    }
+  },
+  "recovery_min_compactions": {
+    "value": 3,
+    "status": "provisional",
+    "source": "docs/COMPACTION.md recovery cost R: fewer compactions of a kind use the fleet value, marked provisional; 3 as the sweet spot's own last 3 cycles"
+  },
+  "context_boost": {
+    "value": {
+      "brain": {
+        "factor": 2
+      }
+    },
+    "status": "set",
+    "source": "owner 2026-11-03, brain's chat: \"(the owner's words)\" (I want brain's sweet spot multiplied by 2x, arbitrarily; document that I chose it), then \"autopilot me refiero\" (I mean the autopilot). The owner's own pick, not measured; no end date. Multiplies brain's sweet spot, ceiling and turn line. Before: owner 2026-10-30, brain 2x and ai 3x for that day only (ended 2026-10-31)."
+  },
+  "mac_watch_free_pct": {
+    "value": 20,
+    "status": "provisional",
+    "source": "owner panel 848447 (Mac health light); macOS memory free % (kern.memorystatus_level) under which the Mac starts to swap hard; today 75"
+  },
+  "mac_act_free_pct": {
+    "value": 10,
+    "status": "provisional",
+    "source": "owner panel 848447; under 10% free macOS kills or freezes apps"
+  },
+  "orphan_min_hours": {
+    "value": 24,
+    "status": "provisional",
+    "source": "owner panel 848447; a one-shot tool or scratchpad process alive a day after launchd adopted it was left by a session (2026-11-05: a 23-day tail -F, a 23-day grep)"
+  }
+}

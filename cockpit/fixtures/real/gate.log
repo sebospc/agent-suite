@@ -1,0 +1,30 @@
+disk: 145 GB free on /System/Volumes/Data
+Preparing worktree (detached HEAD 58b9596d)
+
+== format
+ok   golden/01_sample.json
+ok   golden/02_sample.json
+ok   golden/03_sample.json
+ok   golden/04_sample.json
+ok   golden/05_sample.json
+ok   golden/06_sample.json
+ok   golden/07_sample.json
+ok   golden/08_sample.json
+ok   golden/09_sample.json
+ok   golden/10_sample.json
+ok   golden/11_sample.json
+ok   golden/12_sample.json
+ok   golden/13_sample.json
+ok   golden/14_sample.json
+ok   golden/15_sample.json
+ok   golden/16_sample.json
+ok   golden/17_sample.json
+ok   golden/18_sample.json
+ok   golden/19_sample.json
+ok   golden/20_sample.json
+ok   golden/21_sample.json
+ok   golden/22_sample.json
+ok   golden/23_sample.json
+ok   golden/24_sample.json
+ok   golden/25_sample.json
+ok   golden/26_sample.json
