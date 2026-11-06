@@ -13,7 +13,7 @@ SETTLE_S = 7 * DAY   # owner, grill 20261018-172831 q6: a task is judged correct
 WINDOW_S = 14 * DAY  # the history the snapshot reads
 RULE = "WATCH when a reviewed bead closed in 14 days took a HOLD before its GO, was reopened or got a fix bead within 7 days"
 SOURCE = "the board (bd), GO-REQ, HOLD and GO messages in transcripts (14 d), actions.jsonl bead_reopened"
-PATCH_BEAD = re.compile(r"^((?:pg|mb)-[a-z0-9]{3,5}(?:\.\d+)*)(?:-[a-z0-9.-]+)?-v\d+\.patch$")  # pg-<bead>-vN.patch (brain's ruling, pg-45v5)
+PATCH_BEAD = re.compile(r"^([a-z]{1,8}-[a-z0-9]{3,5}(?:\.\d+)*)(?:-[a-z0-9.-]+)?-v\d+\.patch$")  # <bead>-vN.patch (brain's ruling, pg-45v5)
 
 
 def rework_rows(tree: Optional[BeadTree], history: Optional[History], reopened: Dict[str, float], now: float) -> List[dict]:

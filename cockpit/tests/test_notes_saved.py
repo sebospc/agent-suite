@@ -122,7 +122,7 @@ class AutopilotGuardTest(unittest.TestCase):
 class SnapshotWiringTest(unittest.TestCase):
     def snapshot(self, decisions, state_file_at, log="docs/DECISIONS.md"):
         b = builder()
-        b.decisions_writer, b.decision_log = "brain", log
+        b.decision_log = log
         answered = [{"id": "4c9041", "answer": "yes", "text": "q", "answeredAt": "2026-10-15T23:00:00-05:00"}]
         live = [LiveSession("agent-brain", "s1", 1, "w1:p1", "15", "idle")]
         b.ports = replace(b.ports, live_sessions=FakeLiveSessions(live), asks=FakeAsks([], answered, NOW),

@@ -5,11 +5,14 @@ from typing import List, Tuple
 # transcripts and sessions launched before a rename still carry them (team.legacy_prefixes).
 PREFIX = "agent-"
 LEGACY_PREFIXES: Tuple[str, ...] = ()
+# The roles the cockpit addresses by name (.cockpit.json team.lead, team.coordinator): the lead gets the needs-you
+# prompts and carries the owner's answers into the decision log; the coordinator gets the board's.
+LEAD, COORDINATOR = "lead", "coordinator"
 
 
-def configure(prefix: str, legacy_prefixes: List[str]) -> None:
-    global PREFIX, LEGACY_PREFIXES
-    PREFIX, LEGACY_PREFIXES = prefix, tuple(legacy_prefixes)
+def configure(prefix: str, legacy_prefixes: List[str], lead: str = "lead", coordinator: str = "coordinator") -> None:
+    global PREFIX, LEGACY_PREFIXES, LEAD, COORDINATOR
+    PREFIX, LEGACY_PREFIXES, LEAD, COORDINATOR = prefix, tuple(legacy_prefixes), lead, coordinator
 
 
 def session_name(role: str) -> str:

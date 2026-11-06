@@ -47,6 +47,7 @@ from cockpit.pause.pause_view import pause_view
 from cockpit.process.process_line import process_line
 from cockpit.process.receipts import receipt_breaks
 from cockpit.source_unavailable import SourceUnavailable
+from cockpit import team as team_names
 from cockpit.team import Team, session_name
 from cockpit.tokens.hold_bands import hold_bands
 from cockpit.tokens.landed_beads import landed_beads
@@ -78,8 +79,6 @@ def day_starts(now: float):
     return today - 86400, today, now
 
 
-# The team stops without these three, so one that is down stays on the board as off
-ALWAYS_SHOWN = ("brain", "coordinator", "reviewer")
 
 class SnapshotBuilder:
     """Reads every port once per cycle and assembles the view model. Every number carries its source and
@@ -87,7 +86,7 @@ class SnapshotBuilder:
 
     def __init__(self, ports: Ports, team: Team, thresholds: Thresholds, prices: PriceTable, budget_s: float,
                  hook_logs: Optional[dict] = None, docs_skipped: Optional[List[str]] = None,
-                 decision_log: str = "docs/DECISIONS.md", decisions_writer: str = "lead"):
+                 decision_log: str = "docs/DECISIONS.md"):
         self.ports = ports
         self.prices = prices
         self.team = team
@@ -96,8 +95,7 @@ class SnapshotBuilder:
         self.tree: Optional[BeadTree] = None  # the last board read, so a bead opens without another bd call
         self.hook_logs = hook_logs or {}
         self.docs_skipped = list(docs_skipped or [])
-        # The session that carries the owner's answers into the decision log (team.decisions_writer).
-        self.decision_log, self.decisions_writer = decision_log, decisions_writer
+        self.decision_log = decision_log
         self.docs_read: tuple = (0.0, None)  # (when, stale docs): git log and the docs are read once an hour
         self.wrongs: Dict[str, list] = {}
         self.week: Dict[str, dict] = {}
@@ -211,7 +209,7 @@ class SnapshotBuilder:
                               {name: {"saved": st.saved_without_id, "places": st.saved_places} for name, st in named.items()},
                               {k: got[k].get("error", "") for k in ("decisions", "landed")}, value(got, "guard"))
         for row in rows:
-            if row["name"] == self.decisions_writer:
+            if row["name"] == team_names.LEAD:  # the lead carries the owner's answers into the decision log
                 row["unsaved_answers"] = [a["id"] for a in saved["not_in_decisions"]]
         # Team health (the owner, 2026-10-16): the team's resources, one row each; what needs the owner is in Your tasks.
         health = [tokens_light(value(got, "tokens"), tokens), context_light(rows), memory_light(rows), said_light(saved, need_dicts),
@@ -299,7 +297,7 @@ class SnapshotBuilder:
             state = session.state if session else "off"
             work = working_on(role, assignee, beads, tree, criteria, role in self.team.coordinating, state) if tree else \
                 {"bead": "", "tag": no_board_tag, "kind": "none", "line": "", "held": []}
-            if session is None and not work["held"] and role not in ALWAYS_SHOWN:
+            if session is None and not work["held"] and role not in (team_names.LEAD, team_names.COORDINATOR, "reviewer"):  # the team stops without these three, so one that is down stays on the board as off
                 continue  # a role with no session and no bead in progress is no row (reviewer-2, cockpit, on-demand roles)
             held = [tree.by_id[i] for i in work["held"]] if tree else []
             stats = stats_by_id.get(session.session_id) if session else None

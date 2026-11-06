@@ -33,7 +33,7 @@ class AcmeConfigTest(unittest.TestCase):
         self.assertEqual(old_paths["board_dir"], new_paths.pop("milestone_dir"))  # dod.json and goal.json sat in board_dir
         self.assertEqual(old_paths, new_paths)
         # The step 5 files predate the session prefix keys, which only the project config carries.
-        team = {key: value for key, value in config["team"].items() if key not in ("session_prefix", "legacy_prefixes", "decisions_writer")}
+        team = {key: value for key, value in config["team"].items() if key not in ("session_prefix", "legacy_prefixes", "lead", "coordinator")}
         self.assertEqual(without_notes(step5("team_sessions.json")), without_notes(team))
 
     def test_the_snapshot_for_the_same_inputs_is_equal_with_the_step5_team_and_the_new_config(self):

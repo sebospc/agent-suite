@@ -25,9 +25,9 @@ PATHS = {
     "hook_logs": NAMED_TEXTS,
 }
 TEAM = {"roles": TEXTS, "coordinating": TEXTS, "known_holders": TEXTS, "projects": NAMED_TEXTS, "session_prefix": TEXT,
-        "legacy_prefixes": TEXTS, "decisions_writer": TEXT}
+        "legacy_prefixes": TEXTS, "lead": TEXT, "coordinator": TEXT}
 SCHEMA = {"port": NUMBER, "paths": PATHS, "team": TEAM}
-OPTIONAL = {"team.decisions_writer", "paths.decision_log", "team.projects", "team.session_prefix", "team.legacy_prefixes", "paths.claude_bin", "paths.board_dir", "paths.bd_command", "paths.panel", "paths.ask_owner", "paths.milestone_dir"}
+OPTIONAL = {"team.lead", "team.coordinator", "paths.decision_log", "team.projects", "team.session_prefix", "team.legacy_prefixes", "paths.claude_bin", "paths.board_dir", "paths.bd_command", "paths.panel", "paths.ask_owner", "paths.milestone_dir"}
 # Each pair: the first key only works with the second one set.
 NEEDS = [("paths.board_dir", "paths.bd_command"), ("paths.bd_command", "paths.board_dir"), ("paths.panel", "paths.ask_owner"),
          ("paths.ask_owner", "paths.panel"), ("paths.milestone_dir", "paths.board_dir")]

@@ -1,6 +1,7 @@
 from dataclasses import replace
 from typing import List
 
+from cockpit import team as roles
 from cockpit.accounts.login import logins_by_use, why_login
 from cockpit.display_time import age, clock_time, day_time
 from cockpit.milestone.criteria import Criteria
@@ -43,12 +44,12 @@ def off_milestone(ctx: NeedsContext) -> List[Need]:
     needs = []
     for holder, beads in sorted(by_holder.items()):
         listed = ", ".join(f"{b.id} ({short_name(ctx.tree.milestone_of(b))}, P{b.priority})" for b in beads)
-        prompt = (f"coordinator: {holder} holds {listed} in progress while {name} is open. By the first project's decision log, 2026-10-13 only P0 "
+        prompt = (f"{roles.COORDINATOR}: {holder} holds {listed} in progress while {name} is open. By the first project's decision log, 2026-10-13 only P0 "
                   f"runs outside the milestone. Please set {'it' if len(beads) == 1 else 'them'} back to open, or tell me why now.")
         needs.append(Need(f"off-{holder}", "warning",
                           f"{holder} works on {len(beads)} bead{'s' if len(beads) > 1 else ''} outside {name}: {listed}.",
                           f"bd: in progress, not under {ctx.criteria.milestone.id} · only P0 may run outside the milestone",
-                          "Tell the coordinator", "copy", prompt, "coordinator"))
+                          f"Tell {roles.COORDINATOR}", "copy", prompt, roles.COORDINATOR))
     return needs
 
 
@@ -63,10 +64,10 @@ def owner_criterion_without_ask(ctx: NeedsContext) -> List[Need]:
                  f"{short_name(ctx.criteria.milestone)} done criteri{'a' if len(waiting) > 1 else 'on'} {ids} wait{'' if len(waiting) > 1 else 's'} on you, "
                  f"and no ask on the panel says so.",
                  "bd · panel.json: no ask names it",
-                 "Ask brain to add it", "copy",
-                 f"brain: {ids} {'are open done criteria that wait' if len(waiting) > 1 else 'is an open done criterion that waits'} on me, "
+                 f"Ask {roles.LEAD} to add it", "copy",
+                 f"{roles.LEAD}: {ids} {'are open done criteria that wait' if len(waiting) > 1 else 'is an open done criterion that waits'} on me, "
                  f"and no ask on the panel names {'them' if len(waiting) > 1 else 'it'}. Please add one ask each with "
-                 f"ask_owner.py add --bead <id>, with options, --rec and --why.", "brain")]
+                 f"ask_owner.py add --bead <id>, with options, --rec and --why.", roles.LEAD)]
 
 
 def with_line(label: str, kind: str, ident: str, evidence: list) -> str:
@@ -99,13 +100,13 @@ def missing_id(ctx: NeedsContext) -> List[Need]:
         if unknown:
             text = f"{session} named {', '.join(unknown)} in a reply today, and none exists"
             needs.append(Need(f"missing-{session}", "caution", text + ".", "transcript replies of the last 24 h · bd export, panel.json, git cat-file",
-                              "Ask brain to check it", "copy",
-                              f"brain: {text}. Please open what is missing (bead, ask or commit) or correct the reference.", "brain"))
+                              f"Ask {roles.LEAD} to check it", "copy",
+                              f"{roles.LEAD}: {text}. Please open what is missing (bead, ask or commit) or correct the reference.", roles.LEAD))
         saved = named["saved"]
         if saved:
             claim = with_line(f"said saved or recorded {saved} time{'s' if saved > 1 else ''} with no id", "saved", "", evidence)
             needs.append(Need(f"unsaved-{session}", "caution", f"{session} {claim}.", "transcript replies of the last 24 h",
-                              "Ask brain to check it", "copy", f"brain: {session} {claim}. Please have it name the id of what it saved.", "brain"))
+                              f"Ask {roles.LEAD} to check it", "copy", f"{roles.LEAD}: {session} {claim}. Please have it name the id of what it saved.", roles.LEAD))
     return needs
 
 
@@ -115,9 +116,9 @@ def receipts(ctx: NeedsContext) -> List[Need]:
     listed = "; ".join(ctx.receipt_breaks[:5]) + (f"; and {len(ctx.receipt_breaks) - 5} more" if len(ctx.receipt_breaks) > 5 else "")
     return [Need("receipts", "warning", f"Review receipts do not match: {listed}.",
                  "messages between sessions this week · sha256 of each GO-REQ, GO, HOLD and LAND-READY (the project's WORKFLOW)",
-                 "Tell the coordinator", "copy",
-                 f"coordinator: review receipts do not match this week: {listed}. Please bounce each one, or tell me why it is right.",
-                 "coordinator")]
+                 f"Tell {roles.COORDINATOR}", "copy",
+                 f"{roles.COORDINATOR}: review receipts do not match this week: {listed}. Please bounce each one, or tell me why it is right.",
+                 roles.COORDINATOR)]
 
 
 def main_red(ctx: NeedsContext) -> List[Need]:
@@ -127,9 +128,9 @@ def main_red(ctx: NeedsContext) -> List[Need]:
         return []
     return [Need("main-red", "warning",
                  f"Main is red: the gate on {gate.commit} failed with {gate.failing} failing test{'' if gate.failing == 1 else 's'}.",
-                 f"verify_commit.sh log · {gate.source}", "Tell brain", "copy",
-                 f"brain: the gate on {gate.commit} is red with {gate.failing} failing tests ({gate.source}). Please fix main "
-                 f"before anything else lands, or tell me why not.", "brain")]
+                 f"verify_commit.sh log · {gate.source}", f"Tell {roles.LEAD}", "copy",
+                 f"{roles.LEAD}: the gate on {gate.commit} is red with {gate.failing} failing tests ({gate.source}). Please fix main "
+                 f"before anything else lands, or tell me why not.", roles.LEAD)]
 
 
 def team_rules_broken(ctx: NeedsContext) -> List[Need]:
@@ -140,8 +141,8 @@ def team_rules_broken(ctx: NeedsContext) -> List[Need]:
     listed = "; ".join(broken)
     return [Need("team-rules", "caution", f"Team rules broken: {listed}.",
                  "bd · .cockpit.json team · found work links the criterion it moves, one bead per task session, "
-                 "every holder a team session", "Tell brain", "copy",
-                 f"brain: team rules are broken on the board: {listed}. Please fix them, or tell me why not.", "brain")]
+                 "every holder a team session", f"Tell {roles.LEAD}", "copy",
+                 f"{roles.LEAD}: team rules are broken on the board: {listed}. Please fix them, or tell me why not.", roles.LEAD)]
 
 
 BASELINE = "~/.cockpit/config-baseline.json"
@@ -156,16 +157,16 @@ def token_tool_guard(ctx: NeedsContext) -> List[Need]:
                          for c in ctx.config_drift)
         tools = ", ".join(sorted({t for c in ctx.config_drift for t in c["tools"]}))
         needs.append(Need("token-tool-config", "warning", f"Token tool config changed since {ctx.config_since} ({tools}): {diff}.",
-                          f"settings files and .mcp.json against {BASELINE}; to accept the change, delete that file", "Tell brain", "copy",
-                          f"brain: the token tool config changed since {ctx.config_since}: {diff}. Check no session lost a hook or its "
+                          f"settings files and .mcp.json against {BASELINE}; to accept the change, delete that file", f"Tell {roles.LEAD}", "copy",
+                          f"{roles.LEAD}: the token tool config changed since {ctx.config_since}: {diff}. Check no session lost a hook or its "
                           f"settings; put back what broke, or tell me it is fine and delete {BASELINE} so the cockpit takes the new "
-                          f"config as its baseline.", "brain"))
+                          f"config as its baseline.", roles.LEAD))
     if ctx.tool_failures:
         listed = "; ".join(ctx.tool_failures)
         needs.append(Need("token-tool-broken", "caution", f"A token tool hook failed in 24 h: {listed}.",
-                          "transcripts (hook errors and timeouts)", "Tell brain", "copy",
-                          f"brain: these token tool hooks crashed or timed out in 24 h: {listed}. Find why and fix it, or tell me "
-                          f"why not.", "brain"))
+                          "transcripts (hook errors and timeouts)", f"Tell {roles.LEAD}", "copy",
+                          f"{roles.LEAD}: these token tool hooks crashed or timed out in 24 h: {listed}. Find why and fix it, or tell me "
+                          f"why not.", roles.LEAD))
     return needs
 
 
@@ -181,9 +182,9 @@ def account_login(ctx: NeedsContext) -> List[Need]:
         if account.active:
             # Logged in on ~/.claude itself: a re-login there touches every session's default login, so brain does it.
             needs.append(Need(f"login-{account.number}", "warning", text, source + " · active: logged in on ~/.claude",
-                              "Tell brain", "copy",
-                              f"brain: account {account.number} needs a new login ({why_login(account)}) and it is the one logged in "
-                              f"on ~/.claude. Please re-login it there and tell me when it is back.", "brain"))
+                              f"Tell {roles.LEAD}", "copy",
+                              f"{roles.LEAD}: account {account.number} needs a new login ({why_login(account)}) and it is the one logged in "
+                              f"on ~/.claude. Please re-login it there and tell me when it is back.", roles.LEAD))
         else:
             needs.append(Need(f"login-{account.number}", "warning", text, source, f"Copy cswap-relogin {account.number}", "copy",
                               f"cswap-relogin {account.number}"))

@@ -70,7 +70,8 @@ def project_config(project_dir: str = ROOT) -> dict:
 
 def team_and_thresholds(config: dict):
     raw = config["team"]
-    configure(raw.get("session_prefix", "agent-"), raw.get("legacy_prefixes", []))
+    configure(raw.get("session_prefix", "agent-"), raw.get("legacy_prefixes", []), raw.get("lead", "lead"),
+              raw.get("coordinator", "coordinator"))
     return Team(raw["roles"], raw["coordinating"], raw["known_holders"]), Thresholds(read_config("thresholds.json"))
 
 
@@ -145,8 +146,7 @@ def real_app(log: Callable[[str], None], config: dict) -> CockpitApp:
     grill = GrillServer(paths["node"], paths["grill_server"], paths["repo"], SUBPROCESS_TIMEOUT_S)
     keeper = RoundKeeper(grill, asks, os.path.expanduser(paths["grill_doc"]), log)
     builder = SnapshotBuilder(ports, team, thresholds, price_table(), CYCLE_BUDGET_S, paths["hook_logs"],
-                              paths["docs_not_describing_code"], paths.get("decision_log", "docs/DECISIONS.md"),
-                              config["team"].get("decisions_writer", "lead"))
+                              paths["docs_not_describing_code"], paths.get("decision_log", "docs/DECISIONS.md"))
     action_log = ActionLogFile(paths["action_log"])
     panes = HerdrPanes(paths["herdr"], SUBPROCESS_TIMEOUT_S)
     controls = Controls(panes, clock, log, action_log)

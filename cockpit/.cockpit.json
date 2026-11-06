@@ -98,6 +98,7 @@
     ],
     "session_prefix": "agent-",
     "legacy_prefixes": [],
-    "decisions_writer": "lead"
+    "lead": "lead",
+    "coordinator": "coordinator"
   }
 }

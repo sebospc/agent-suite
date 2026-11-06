@@ -84,7 +84,8 @@
       "~/.agent-board/.mcp.json"
     ],
     "config_baseline": "~/.cockpit/config-baseline.json",
-    "prices_page": "https://platform.claude.com/docs/en/about-claude/pricing.md"
+    "prices_page": "https://platform.claude.com/docs/en/about-claude/pricing.md",
+    "decision_log": "docs/DECISIONS.md"
   },
   "team": {
     "_note": "The team, from projectapp docs/WORKFLOW.md. Sessions run as agent-<role> (team dependency 5). cockpit: shown and managed by the autopilot (the owner, 2026-10-17, ask 09670e).",
@@ -121,6 +122,8 @@
     "session_prefix": "agent-",
     "legacy_prefixes": [
       "old-"
-    ]
+    ],
+    "lead": "brain",
+    "coordinator": "coordinator"
   }
 }
