@@ -1,4 +1,4 @@
-# What a SendMessage body must hold, for send_guard.py: root CLAUDE.md rule 3 (real counts, never "tests pass") and
+# What a SendMessage body must hold, for send_guard.py: docs/PROTOCOL.md (real counts, never "tests pass") and
 # relays word for word (the coordinator summarised a peer on 2026-11-05).
 import json
 import re
@@ -48,7 +48,7 @@ def count_problem(message: str) -> str | None:
     if not claims:
         return None
     return (f"send_guard: this line reports a result with no count: {claims[0].strip()[:120]!r}. Give the numbers "
-            "(N passed, M failed, K skipped), root CLAUDE.md rule 3.")
+            "(N passed, M failed, K skipped), docs/PROTOCOL.md.")
 
 
 def strings_in(value):

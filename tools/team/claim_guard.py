@@ -10,13 +10,15 @@ import time
 
 from owner_ask_guard import CODE, TAIL_BYTES, blocks, last_turn, parsed_entries
 from transcript_tail import tail_lines
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import suite_config  # noqa: E402
 
 CLAIM = re.compile(r"(?:^|[.!:]\s+|\b(?:I|we|brain|it|both)\s+(?:have\s+|has\s+|just\s+)?)(?:saved|landed|committed|pushed)\b",
                    re.IGNORECASE | re.MULTILINE)
 # A bead id is a short prefix, a dash and an id with a digit in it (t-12, ab-3k9x.2), so "follow-up" is not one.
 NAMED = re.compile(r"\b[0-9a-f]{7,40}\b|\b[a-z]{1,8}-(?=[0-9a-z.]*\d)[0-9a-z]{2,}(?:\.[0-9a-z]+)*\b"
                    r"|[\w./~-]+\.(?:md|json|py|patch|msg|txt|html)\b")
-SAVED_LOG = os.environ.get("AGENT_SAVED_LOG", os.path.expanduser("~/.agent-board/saved_guard.jsonl"))
+SAVED_LOG = suite_config.board_file("AGENT_SAVED_LOG", "saved_guard.jsonl")
 
 
 def reply_text(entries: list) -> str:

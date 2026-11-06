@@ -1,0 +1,169 @@
+{
+  "_note": "Every part of the suite. A project picks each one as-is, adapted or skip in its .agent-suite.json (parts). needs: bins on PATH, env keys, other parts; optional needs only turn a feature on. hooks: what tools/install_team.py wraps into the project's .claude/settings.json ({suite} is this folder). leaves_machine: what, if anything, goes off the machine. Commands run from the suite folder; DIR is the project folder.",
+  "parts": {
+    "cockpit": {
+      "does": "Local page for the owner: milestone and goal, what each session does, open asks answered in a grill round, token use; the autopilot that compacts, clears and keeps caches warm by rules the owner turns on; controls checked on screen; health lights",
+      "files": ["cockpit/"],
+      "needs": {"bins": ["python3", "herdr", "claude"], "optional_bins": ["bd", "engram", "node", "rtk"], "env": [], "optional_env": ["TYPESAFE_API_KEY"], "parts": []},
+      "config": ["DIR/.cockpit.json (paths, team, port), over ~/.config/cockpit/config.json; schema in cockpit/cockpit/project_config/config_schema.py"],
+      "hooks": [],
+      "install": "python3 cockpit/tools/install_project.py install DIR (status line and pause guard, with a backup)",
+      "verify": "python3 cockpit/cockpit.py --project DIR, open the url it prints; the header lists any source it cannot read",
+      "uninstall": "python3 cockpit/tools/install_project.py uninstall DIR",
+      "leaves_machine": "Reads the public price page. With TYPESAFE_API_KEY set, the task classifier sends a ticket's title and notes to TypeSafe. Nothing else"
+    },
+    "panel": {
+      "does": "Every question to the owner goes on one panel with options, a recommendation and a why; only the ask tool writes it; a reply that asks the owner without a panel ask is held; one waiter reports answers",
+      "files": ["tools/team/ask_owner.py", "tools/team/panel_wait.py", "tools/team/panel_write_guard.py", "tools/team/owner_ask_guard.py"],
+      "needs": {"bins": ["python3"], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": ["board_dir (panel.json lives there)"],
+      "hooks": [
+        {"event": "PreToolUse", "matcher": "Edit|Write|MultiEdit|Bash", "script": "panel_write_guard.py"},
+        {"event": "Stop", "matcher": "", "script": "owner_ask_guard.py"}
+      ],
+      "install": "python3 tools/install_team.py install DIR",
+      "verify": "python3 tools/team/ask_owner.py list",
+      "uninstall": "python3 tools/install_team.py uninstall DIR",
+      "leaves_machine": "no"
+    },
+    "messages": {
+      "does": "Session-to-session messages: one event, one recipient; a result line carries real counts; a relay quotes its author word for word; every message logged",
+      "files": ["tools/team/send_guard.py", "tools/team/message_rules.py", "tools/team/transcript_tail.py", "docs/PROTOCOL.md"],
+      "needs": {"bins": ["python3"], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": ["board_dir (sent.jsonl)"],
+      "hooks": [
+        {"event": "PreToolUse", "matcher": "SendMessage", "script": "send_guard.py"},
+        {"event": "PostToolUse", "matcher": "SendMessage", "script": "send_guard.py"},
+        {"event": "PostToolUseFailure", "matcher": "SendMessage", "script": "send_guard.py"}
+      ],
+      "install": "python3 tools/install_team.py install DIR",
+      "verify": "python3 tools/doctor.py DIR",
+      "uninstall": "python3 tools/install_team.py uninstall DIR",
+      "leaves_machine": "no"
+    },
+    "saved-guard": {
+      "does": "A reply that says something was saved, landed, committed or pushed must name it (a sha, a ticket, a file); each hold is logged for the cockpit's said-vs-saved view",
+      "files": ["tools/team/claim_guard.py"],
+      "needs": {"bins": ["python3"], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": ["board_dir (saved_guard.jsonl)"],
+      "hooks": [{"event": "Stop", "matcher": "", "script": "claim_guard.py"}],
+      "install": "python3 tools/install_team.py install DIR",
+      "verify": "python3 tools/doctor.py DIR",
+      "uninstall": "python3 tools/install_team.py uninstall DIR",
+      "leaves_machine": "no"
+    },
+    "receipts": {
+      "does": "A test receipt with a new skip marker or a lower count is refused; a landed commit must match the reviewed frozen patch (tree, message, patch-id, no tool attribution)",
+      "files": ["tools/team/receipt_guards.py", "tools/team/verify_landing.py"],
+      "needs": {"bins": ["python3", "git"], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": [],
+      "hooks": [],
+      "install": "nothing to install: the author runs receipt_guards.py before a GO-REQ, the lead runs verify_landing.py after landing",
+      "verify": "python3 tools/team/verify_landing.py --help",
+      "uninstall": "nothing",
+      "leaves_machine": "no"
+    },
+    "pause": {
+      "does": "One file pauses the team: while it exists, commits, pushes, claims, messages and model runs are denied and logged",
+      "files": ["tools/team/pause_guard.py"],
+      "needs": {"bins": ["python3"], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": ["board_dir (paused, pause_denials.jsonl)"],
+      "hooks": [{"event": "PreToolUse", "matcher": "Bash|SendMessage", "script": "pause_guard.py", "skip_with": "cockpit"}],
+      "install": "python3 tools/install_team.py install DIR (the cockpit part installs its own pause guard, so this hook is skipped when the cockpit is chosen)",
+      "verify": "python3 tools/doctor.py DIR",
+      "uninstall": "python3 tools/install_team.py uninstall DIR",
+      "leaves_machine": "no"
+    },
+    "memory": {
+      "does": "Engram as the team's memory: paste-ready rules, a nudge to save after 15 minutes without a save, a summary and a fresh role state after every compaction, a migration from markdown memory files",
+      "files": ["tools/team/engram_save_nudge.py", "tools/memory/migrate_md_memory.py", "docs/RULES.md"],
+      "needs": {"bins": ["python3", "engram"], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": ["board_dir (engram-nudged)", "the Engram project name, in the pasted rules"],
+      "hooks": [
+        {"event": "UserPromptSubmit", "matcher": "", "script": "engram_save_nudge.py"},
+        {"event": "SessionStart", "matcher": "compact", "script": "engram_save_nudge.py"}
+      ],
+      "install": "python3 tools/install_team.py install DIR; paste docs/RULES.md \"Memory\" into the project's CLAUDE.md; add Engram's MCP server with cloud sync off",
+      "verify": "engram search test --project PROJECT; python3 tools/doctor.py DIR",
+      "uninstall": "python3 tools/install_team.py uninstall DIR",
+      "leaves_machine": "no, with Engram's cloud sync off (check: no cloud target set, ENGRAM_CLOUD_AUTOSYNC unset)"
+    },
+    "queue": {
+      "does": "The task queue (in_flight.json: tickets in flight, waiting on the owner, next per session); one ticket in progress per session as a hard block on the claim; the courier that hands a free session its next ticket and nudges an idle one",
+      "files": ["tools/team/task_queue.py", "tools/team/claim_block.py", "tools/team/courier.py"],
+      "needs": {"bins": ["python3", "bd"], "optional_bins": ["herdr"], "env": [], "optional_env": [], "parts": ["launcher"]},
+      "config": ["board_dir", "session_prefix", "courier.idle_minutes", "courier.cooldown_minutes", "courier.always_watched"],
+      "hooks": [{"event": "PreToolUse", "matcher": "Bash", "script": "claim_block.py"}],
+      "install": "python3 tools/install_team.py install DIR; start the courier detached: nohup python3 tools/team/courier.py > BOARD/courier.log 2>&1 & echo $! > BOARD/courier.pid",
+      "verify": "python3 tools/team/task_queue.py show; python3 tools/team/courier.py --once",
+      "uninstall": "python3 tools/install_team.py uninstall DIR; kill the pid in BOARD/courier.pid",
+      "leaves_machine": "no"
+    },
+    "slots": {
+      "does": "Named resources granted one holder at a time with a waiting line (a simulator, a heavy build, a test database); a hold past twice its minutes is flagged",
+      "files": ["tools/team/slots.py"],
+      "needs": {"bins": ["python3"], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": ["slots: name -> {\"minutes\": usual hold}"],
+      "hooks": [],
+      "install": "write the slots in DIR/.agent-suite.json",
+      "verify": "python3 tools/team/slots.py show",
+      "uninstall": "nothing",
+      "leaves_machine": "no"
+    },
+    "snapshot": {
+      "does": "Copies the board, an export of the tickets and the memory folders to a private git repo after each push, behind a secret scan",
+      "files": ["tools/team/board_snapshot.py"],
+      "needs": {"bins": ["python3", "git", "rsync", "gitleaks"], "optional_bins": ["bd"], "env": [], "optional_env": [], "parts": []},
+      "config": ["snapshot.remote (required)", "snapshot.clone", "snapshot.memory_dirs", "snapshot.exclude", "snapshot.bd_actor"],
+      "hooks": [],
+      "install": "the owner creates the private repo; write snapshot in DIR/.agent-suite.json",
+      "verify": "python3 tools/team/board_snapshot.py",
+      "uninstall": "remove snapshot from the config; the private repo stays until the owner deletes it",
+      "leaves_machine": "yes: the board, the tickets and the memory folders go to snapshot.remote. Needs the owner's yes"
+    },
+    "team-check": {
+      "does": "Prints one line per finding (two tickets in progress, a stale one, idle with ready work, a closed ticket in flight, an overdue slot) and exits 1, so a timer wakes the coordinator only on a finding",
+      "files": ["tools/team/team_check.py"],
+      "needs": {"bins": ["python3", "bd"], "optional_bins": [], "env": [], "optional_env": [], "parts": ["queue"]},
+      "config": ["team_check.stale_hours", "team_json"],
+      "hooks": [],
+      "install": "a timer (launchd, cron or the cockpit) runs it every 20 minutes and prompts the coordinator with its output when it exits 1",
+      "verify": "python3 tools/team/team_check.py; echo $?",
+      "uninstall": "remove the timer",
+      "leaves_machine": "no"
+    },
+    "launcher": {
+      "does": "The claude wrapper: session name from the herdr pane label, the role's launch flags from team.json, the saved flags back on a bare resume; exports AGENT_SESSION for the guards",
+      "files": ["tools/team/launcher.py", "templates/shell/claude.sh", "templates/shell/claude.fish", "templates/team.json"],
+      "needs": {"bins": ["python3", "claude"], "optional_bins": ["herdr"], "env": ["AGENT_SUITE"], "optional_env": [], "parts": []},
+      "config": ["session_prefix", "team_json"],
+      "hooks": [{"event": "SessionStart", "matcher": "", "script": "launcher.py", "args": ["session-start"]}],
+      "install": "python3 tools/install_team.py install DIR; set AGENT_SUITE to this folder and source templates/shell/claude.sh (bash, zsh) or copy claude.fish to ~/.config/fish/functions/; write BOARD/team.json from templates/team.json",
+      "verify": "python3 tools/team/launcher.py args | tr '\\0' ' '",
+      "uninstall": "python3 tools/install_team.py uninstall DIR; remove the wrapper from the shell",
+      "leaves_machine": "no"
+    },
+    "protocol": {
+      "does": "The roles (lead, coordinator, reviewer, worker), the message types and who sends what, the lead-coordinator flow, review by risk, and a prompt template per role",
+      "files": ["docs/PROTOCOL.md", "templates/roles/"],
+      "needs": {"bins": [], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": [],
+      "hooks": [],
+      "install": "copy the role templates the team uses into the project, fill {{session}}, {{folders}} and {{decision_log}}",
+      "verify": "each session's prompt names its role, its folders and docs/PROTOCOL.md",
+      "uninstall": "nothing",
+      "leaves_machine": "no"
+    },
+    "rules": {
+      "does": "Ready-to-paste rule text for each gentle-ai idea and the Engram conventions",
+      "files": ["docs/RULES.md"],
+      "needs": {"bins": [], "optional_bins": [], "env": [], "optional_env": [], "parts": []},
+      "config": [],
+      "hooks": [],
+      "install": "paste the chosen blocks into the project's CLAUDE.md or AGENTS.md",
+      "verify": "the project's guide holds the pasted blocks",
+      "uninstall": "delete the blocks",
+      "leaves_machine": "no"
+    }
+  }
+}

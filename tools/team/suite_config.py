@@ -66,3 +66,15 @@ def board_path(config: dict, name: str) -> Path:
 def session_name(config: dict, role: str) -> str:
     prefix = config["session_prefix"]
     return role if role.startswith(prefix) else prefix + role
+
+
+def board_file(env_name: str, file_name: str) -> str:
+    """A board file for a hook: the env override, else the config's board folder. A broken config falls back to the
+    defaults, since a hook that crashes on it would stop guarding."""
+    if os.environ.get(env_name):
+        return os.path.expanduser(os.environ[env_name])
+    try:
+        config = load()
+    except ConfigError:
+        config = DEFAULTS
+    return str(board_path(config, file_name))

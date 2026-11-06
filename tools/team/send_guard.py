@@ -13,6 +13,8 @@ from functools import partial
 from pathlib import Path
 
 from message_rules import content_problem
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import suite_config  # noqa: E402
 
 PASS = 0
 BLOCK = 2
@@ -26,7 +28,7 @@ PENDING_WINDOW = timedelta(seconds=120)
 
 def sent_log_path() -> Path:
     # Outside the session on purpose: the log must outlive a restarted session and its transcript.
-    return Path(os.environ.get("AGENT_SENT_LOG", "~/.agent-board/sent.jsonl")).expanduser()
+    return Path(suite_config.board_file("AGENT_SENT_LOG", "sent.jsonl"))
 
 
 def event_key(message) -> str | None:

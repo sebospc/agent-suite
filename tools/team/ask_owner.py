@@ -18,8 +18,10 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import suite_config  # noqa: E402
 
-PANEL = os.environ.get("AGENT_PANEL", os.path.expanduser("~/.agent-board/panel.json"))
+PANEL = suite_config.board_file("AGENT_PANEL", "panel.json")
 LOCK = PANEL + ".lock"
 KINDS = ("blocker", "design")
 

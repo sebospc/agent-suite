@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 # PreToolUse on Edit, Write and Bash: only ask_owner.py writes the panel file, in its own format, so an ask is never lost
-# or rewritten by hand (root CLAUDE.md rule 10; panel.json was rewritten with json.dump twice). Fails open on any error.
+# or rewritten by hand (panel.json was rewritten with json.dump twice). Fails open on any error.
 import json
 import os
 import re
 import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import suite_config  # noqa: E402
 
-PANEL = os.path.realpath(os.environ.get("AGENT_PANEL", os.path.expanduser("~/.agent-board/panel.json")))
+ASK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ask_owner.py")
+
+PANEL = os.path.realpath(suite_config.board_file("AGENT_PANEL", "panel.json"))
 PANEL_NAME = re.escape(os.path.basename(PANEL))
 WRITES_IN_SHELL = re.compile(
     rf"json\.dump|write_text|\.write\(|open\([^)]*['\"][wa]\+?['\"]|sed\s+-i|perl\s+-\w*i|\btee\b|>\s*\S*{PANEL_NAME}"
     rf"|\b(?:mv|cp)\s+\S+\s+\S*{PANEL_NAME}")
 PANEL_TOOL = re.compile(r"\bask_owner\.py\b")
-REASON = ("panel_write_guard: only ask_owner.py writes the panel (root CLAUDE.md rule 10). Add with `python3 "
-          "~/.agent-board/ask_owner.py add ...`, record an answer with `... answer <id> \"<owner's words>\"`.")
+REASON = ("panel_write_guard: only ask_owner.py writes the panel. Add with `python3 "
+          + ASK + " add ...`, record an answer with `... answer <id> \"<owner's words>\"`.")
 
 
 def verdict(hook: dict) -> str | None:

@@ -8,11 +8,13 @@ import time
 from datetime import datetime
 
 from transcript_tail import tail_lines
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import suite_config  # noqa: E402
 
 TAIL_BYTES = 3_000_000
 QUIET_SECONDS = 900
 SAVE_TOOLS = ("mcp__engram__mem_save", "mcp__engram__mem_update", "mcp__engram__mem_session_summary")
-NUDGED = os.environ.get("AGENT_ENGRAM_NUDGED", os.path.expanduser("~/.agent-board/engram-nudged"))
+NUDGED = suite_config.board_file("AGENT_ENGRAM_NUDGED", "engram-nudged")
 
 NUDGE = ("MEMORY REMINDER (docs/WORKFLOW.md \"Memory\"): 15 minutes or more since this session's last Engram save. "
          "If you decided, fixed or learned something, or your state moved, mem_save it now "

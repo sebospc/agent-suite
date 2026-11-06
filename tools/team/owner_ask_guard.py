@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Stop hook (root CLAUDE.md rule 10): a reply that asks the owner something may end only after the
+# Stop hook: a reply that asks the owner something may end only after the
 # question is on the panel. Questions asked only in a session window got lost on 2026-10-14.
 import json
 import os
@@ -7,10 +7,14 @@ import re
 import sys
 
 from transcript_tail import tail_lines
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import suite_config  # noqa: E402
+
+ASK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ask_owner.py")
 
 # The last turn is recent: a full read of a 1 GB transcript took 18.6 s, over the 10 s timeout (2026-11-05).
 TAIL_BYTES = 5_000_000
-PANEL = os.environ.get("AGENT_PANEL", os.path.expanduser("~/.agent-board/panel.json"))
+PANEL = suite_config.board_file("AGENT_PANEL", "panel.json")
 ASK_CALL = re.compile(r"^\s*(env [^;|&]*\s)?python3?\s+\S*ask_owner\.py\s+(add|answer)\b")
 # A reply may point at an ask already on the panel instead of adding it again.
 ASK_ID = re.compile(r"\b(?:ask|panel)\b[^\n]{0,40}?\b([0-9a-f]{6})\b", re.IGNORECASE)
@@ -93,8 +97,8 @@ def verdict(entries: list, known_ask_ids: set) -> str | None:
     if named_ids & known_ask_ids:
         return None
     return (
-        "This turn asks the owner something that is not on the panel (root CLAUDE.md rule 10). "
-        "Add it with `python3 ~/.agent-board/ask_owner.py add ...` and name its id in the reply, "
+        "This turn asks the owner something that is not on the panel. "
+        "Add it with `python3 " + ASK + " add ...` and name its id in the reply, "
         "or rewrite the reply so it asks nothing."
     )
 

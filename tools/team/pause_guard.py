@@ -5,9 +5,11 @@ import os
 import re
 import sys
 import time
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import suite_config  # noqa: E402
 
-PAUSE_FILE = os.environ.get("AGENT_PAUSE_FILE", os.path.expanduser("~/.agent-board/paused"))
-DENIAL_LOG = os.environ.get("AGENT_PAUSE_LOG", os.path.expanduser("~/.agent-board/pause_denials.jsonl"))
+PAUSE_FILE = suite_config.board_file("AGENT_PAUSE_FILE", "paused")
+DENIAL_LOG = suite_config.board_file("AGENT_PAUSE_LOG", "pause_denials.jsonl")
 # One shell command per segment, so "git log; echo push" is not read as a push.
 SEGMENT = re.compile(r"[^;&|\n]+")
 BASH_RULES = (

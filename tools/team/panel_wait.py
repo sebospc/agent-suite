@@ -12,8 +12,10 @@ import os
 import select
 import sys
 import time
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import suite_config  # noqa: E402
 
-PANEL = os.environ.get("AGENT_PANEL", os.path.expanduser("~/.agent-board/panel.json"))
+PANEL = suite_config.board_file("AGENT_PANEL", "panel.json")
 # Answers brain has been told about; read at start so one that lands between two waiters is not taken as seen.
 SEEN = os.path.join(os.path.dirname(PANEL), "state", "brain_seen_answers.json")
 
