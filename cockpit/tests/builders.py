@@ -10,6 +10,8 @@ from cockpit.thresholds import Thresholds
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIXTURES = os.path.join(ROOT, "fixtures")
+# The tests run on one real project's config, kept as the suite's example profile.
+FIRST_PROJECT = os.path.join(os.path.dirname(ROOT), "examples", "first-project")
 HOUR = 3600.0
 NOW = 1_792_123_540.0  # 2026-10-15 23:05:40 -05:00, the fixtures' board snapshot
 
@@ -26,7 +28,7 @@ def milestone(id="pg-m4", number=4, status="open"):
 
 
 def team():
-    raw = load_config(ROOT)["team"]
+    raw = load_config(FIRST_PROJECT)["team"]
     return Team(raw["roles"], raw["coordinating"], raw["known_holders"])
 
 

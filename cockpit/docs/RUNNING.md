@@ -39,8 +39,8 @@ Every path is the default from `docs/DATA_SOURCES.md`. Check these four on your 
 
 | Key | Default | Check |
 |---|---|---|
-| `node` | `~/.nvm/versions/node/v22.23.2/bin/node` | grill-with-ui needs Node 20+; your default node is 18 |
-| `grill_server` | `~/Documents/project/.claude/skills/grill-with-ui/server.mjs` | the pinned skill in the project repo |
+| `node` | `node` | grill-with-ui needs Node 20+; point it at a Node 20+ binary if the default one is older |
+| `grill_server` | `{project}/.claude/skills/grill-with-ui/server.mjs` | the pinned skill in the project repo |
 | `bd_command` | `bd export --all` | must print one bead per line on stdout; if not, tell me what `bd export --help` says |
 
 `team_json` points at `~/.agent-board/team.json`; until it exists the drift column stays blank and the header
@@ -108,13 +108,13 @@ the cockpit.
 The cockpit reads Jev's key from the environment variable `TYPESAFE_API_KEY`, the same key the project repo keeps in
 its `.env.local` (the owner, 2026-10-17: one name for the TypeSafe key). The endpoint and the model, `jev-latest`, are
 fixed in `cockpit/classifier/jev_classifier.py`. Load only that line in the shell you start the cockpit from, without
-printing it. fish:
+printing it, with `PROJECT` set to the project's folder. fish:
 
 ```
-set -gx TYPESAFE_API_KEY (string replace -r '^TYPESAFE_API_KEY=' '' -- (grep '^TYPESAFE_API_KEY=' ~/Documents/project/.env.local))
+set -gx TYPESAFE_API_KEY (string replace -r '^TYPESAFE_API_KEY=' '' -- (grep '^TYPESAFE_API_KEY=' "$PROJECT"/.env.local))
 ```
 
-zsh: `export TYPESAFE_API_KEY="$(sed -n 's/^TYPESAFE_API_KEY=//p' ~/Documents/project/.env.local)"`.
+zsh: `export TYPESAFE_API_KEY="$(sed -n 's/^TYPESAFE_API_KEY=//p' "$PROJECT"/.env.local)"`.
 Check with `[ -n "$TYPESAFE_API_KEY" ] && echo set`, and start `python3 cockpit.py`. Each running
 session's panel then shows "Jev suggests <model>, <effort> for <bead>: confidence ...". It is shown only, never
 applied. Without the key it says Jev is not connected, under "sources not set up yet".

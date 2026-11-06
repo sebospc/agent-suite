@@ -11,12 +11,12 @@ details (timeouts on `bd`, herdr quirks), not its percent bar or mode buttons.
 
 | What | Path or command |
 |---|---|
-| Repo (shared checkout) | `~/Documents/project` (panel.py `REPO`); landing ref `stack-brain` |
+| Repo (shared checkout) | `paths.repo` (`{project}` by default); landing ref `paths.landing_ref` |
 | Board | `~/.agent-board` (run `bd` there with `BEADS_ACTOR=<name>`) |
 | Panel asks | `~/.agent-board/panel.json`, written only through `ask_owner.py` |
 | Milestone done criteria | `~/.agent-board/dod.json`; goal metric `~/.agent-board/goal.json` |
 | Stack of commits and slots | `~/.agent-board/stack.json` |
-| Transcripts (all accounts) | `~/.claude/projects/-Users-me-Documents-project/<session-id>.jsonl` |
+| Transcripts (all accounts) | `~/.claude/projects/<the project folder, slashes as dashes>/<session-id>.jsonl` |
 | cswap profiles | `~/.claude-swap-backup/sessions/<n>-<email>/` (macOS) |
 | Live session records | `<profile>/sessions/<pid>.json`, and `~/.claude/sessions/<pid>.json` for the default login |
 | Account settings (the window step's proof) | `<profile>/settings.json`, and `~/.claude/settings.json` for the default login; read only |

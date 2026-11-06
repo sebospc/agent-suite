@@ -1,0 +1,126 @@
+{
+  "_note": "The first project's real cockpit config, kept as an example: a team of about ten sessions, beads, a panel, Engram, herdr. Paths name that machine.",
+  "port": 8765,
+  "paths": {
+    "_note": "Where the cockpit reads on the owner's Mac (docs/DATA_SOURCES.md). Everything here is read only, except ask_owner.py answer, the controls typed into panes, and the cockpit's own folder ~/.cockpit.",
+    "board_dir": "~/.agent-board",
+    "milestone_dir": "~/.agent-board",
+    "bd_command": [
+      "bd",
+      "export",
+      "--all"
+    ],
+    "panel": "~/.agent-board/panel.json",
+    "ask_owner": [
+      "python3",
+      "~/.agent-board/ask_owner.py"
+    ],
+    "transcripts": "~/.claude/projects",
+    "engram_bin": "~/.local/bin/engram",
+    "engram_db": "~/.engram/engram.db",
+    "engram_project": "acme",
+    "cswap_profiles": "~/.claude-swap-backup/sessions",
+    "default_sessions": "~/.claude/sessions",
+    "default_settings": "~/.claude/settings.json",
+    "herdr": [
+      "herdr"
+    ],
+    "usage": "~/.cockpit/usage.json",
+    "balancer_log": "~/.claude/handoff/state/decisions.jsonl",
+    "repo": "~/Documents/project",
+    "repos": [
+      "~/Documents/project",
+      "~/Documents/agent-suite",
+      "~/.agent-board"
+    ],
+    "landing_ref": "stack-brain",
+    "gate_logs": "panel.json scratch",
+    "team_json": "~/.agent-board/team.json",
+    "node": "~/.nvm/versions/node/v22.23.2/bin/node",
+    "grill_server": "~/Documents/project/.claude/skills/grill-with-ui/server.mjs",
+    "grill_doc": "~/.cockpit/grill-asks.md",
+    "action_log": "~/.cockpit/actions.jsonl",
+    "learned_log": "~/.cockpit/learned.jsonl",
+    "docs_not_describing_code": [
+      "docs/DECISIONS.md",
+      "docs/decisions-log.md",
+      "docs/STATUS.md",
+      "docs/adr/"
+    ],
+    "metrics_log": "~/.cockpit/metrics.jsonl",
+    "jev_record": "~/.cockpit/jev_record.jsonl",
+    "jev_calls": "~/.cockpit/jev_calls.jsonl",
+    "jev_answers": "~/.cockpit/jev_answers.json",
+    "pause_file": "~/.agent-board/paused",
+    "disk_volume": "/System/Volumes/Data",
+    "disk_folders": {
+      "transcripts": "~/.claude/projects",
+      "board": "~/.agent-board",
+      "cockpit": "~/.cockpit"
+    },
+    "saved_guard_log": "~/.agent-board/saved_guard.jsonl",
+    "hook_settings": [
+      "~/.claude/settings.json",
+      "~/Documents/project/.claude/settings.json",
+      "~/Documents/project/.claude/settings.local.json"
+    ],
+    "hook_logs": {
+      "pick_account": "~/.claude/handoff/state/decisions.jsonl",
+      "commit_guard": "~/.agent-board/saved_guard.jsonl",
+      "pause_guard": "~/.agent-board/pause_denials.jsonl"
+    },
+    "rtk": [
+      "/opt/homebrew/bin/rtk"
+    ],
+    "rtk_scratchpads": "/private/tmp/claude-501/-Users-me-Documents-project*",
+    "context_mode_transcripts": "~/.claude/projects/-Users-me-Documents-old-cockpit/*.jsonl",
+    "context_mode_sessions": "~/.cockpit/context-mode/home/context-mode/sessions",
+    "guarded_configs": [
+      "~/.claude/settings.json",
+      "~/.claude-swap-backup/sessions/*/settings.json",
+      "~/Documents/*/.claude/settings*.json",
+      "~/Documents/*/.mcp.json",
+      "~/.agent-board/.claude/settings*.json",
+      "~/.agent-board/.mcp.json"
+    ],
+    "config_baseline": "~/.cockpit/config-baseline.json",
+    "prices_page": "https://platform.claude.com/docs/en/about-claude/pricing.md"
+  },
+  "team": {
+    "_note": "The team, from projectapp docs/WORKFLOW.md. Sessions run as agent-<role> (team dependency 5). cockpit: shown and managed by the autopilot (the owner, 2026-10-17, ask 09670e).",
+    "roles": [
+      "brain",
+      "coordinator",
+      "reviewer",
+      "reviewer-2",
+      "ai",
+      "ios",
+      "android",
+      "format",
+      "backend",
+      "design",
+      "shaping-lead",
+      "investigator",
+      "cockpit",
+      "agent-ddp"
+    ],
+    "coordinating": [
+      "brain",
+      "coordinator",
+      "reviewer",
+      "reviewer-2",
+      "agent-ddp"
+    ],
+    "projects": {
+      "agent-ddp": "~/Documents/agent-ddp"
+    },
+    "known_holders": [
+      "owner",
+      "claude-cloud"
+    ],
+    "session_prefix": "agent-",
+    "legacy_prefixes": [
+      "old-"
+    ]
+  }
+}

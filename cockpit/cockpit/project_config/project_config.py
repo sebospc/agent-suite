@@ -7,6 +7,7 @@ from cockpit.project_config.config_schema import check_complete, check_layer
 
 GLOBAL_CONFIG = "~/.config/cockpit/config.json"
 PROJECT_FILE = ".cockpit.json"
+SUITE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
 def project_file(project_dir: str) -> str:
@@ -17,9 +18,21 @@ def load_config(project_dir: str, global_path: str = GLOBAL_CONFIG) -> dict:
     # CCManager's way: the project's file over the global one, each checked on its own so an error names its file.
     project_path = project_file(project_dir)
     layers = [read_layer(os.path.expanduser(global_path), required=False), read_layer(project_path, required=True)]
-    merged = reduce(merged_over, layers, {})
+    merged = with_places(reduce(merged_over, layers, {}), {"{project}": os.path.abspath(os.path.expanduser(project_dir)),
+                                                         "{suite}": SUITE})
     check_complete(merged, project_path)
     return merged
+
+
+def with_places(value, places: dict):
+    # "{project}" is the project's own folder and "{suite}" this suite's, so one config works wherever both live.
+    if isinstance(value, str):
+        return reduce(lambda text, place: text.replace(place, places[place]), places, value)
+    if isinstance(value, list):
+        return [with_places(item, places) for item in value]
+    if isinstance(value, dict):
+        return {key: with_places(item, places) for key, item in value.items()}
+    return value
 
 
 def read_layer(path: str, required: bool) -> dict:

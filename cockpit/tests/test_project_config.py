@@ -8,7 +8,7 @@ from cockpit.composition import project_config, team_and_thresholds
 from cockpit.project_config.config_error import ConfigError
 from cockpit.project_config.project_config import load_config
 from cockpit.team import Team
-from tests.builders import FIXTURES, ROOT
+from tests.builders import FIRST_PROJECT, FIXTURES, ROOT
 from tests.test_snapshot import builder
 
 STEP5 = os.path.join(FIXTURES, "step5_config")  # config/paths.json and team_sessions.json as they were at f3df56f
@@ -25,7 +25,7 @@ def without_notes(raw: dict) -> dict:
 
 class AcmeConfigTest(unittest.TestCase):
     def test_acme_reads_the_same_paths_port_and_team_as_the_step5_files(self):
-        config = project_config()
+        config = project_config(FIRST_PROJECT)
         old_paths = without_notes(step5("paths.json"))
         self.assertEqual(old_paths.pop("port"), config["port"])
         new_paths = without_notes(config["paths"])
@@ -38,7 +38,7 @@ class AcmeConfigTest(unittest.TestCase):
     def test_the_snapshot_for_the_same_inputs_is_equal_with_the_step5_team_and_the_new_config(self):
         old = step5("team_sessions.json")
         old_team = Team(old["roles"], old["coordinating"], old["known_holders"])
-        new_team, _ = team_and_thresholds(project_config())
+        new_team, _ = team_and_thresholds(project_config(FIRST_PROJECT))
         before, after = builder(), builder()
         before.team, after.team = old_team, new_team
         self.assertEqual(json.dumps(before.build(), sort_keys=True), json.dumps(after.build(), sort_keys=True))
@@ -49,7 +49,7 @@ class LoadConfigTest(unittest.TestCase):
         self.folder = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, self.folder)
         self.global_path = os.path.join(self.folder, "global.json")
-        self.complete = project_config()
+        self.complete = project_config(FIRST_PROJECT)
 
     def write(self, path: str, raw) -> None:
         with open(path, "w", encoding="utf-8") as handle:
@@ -65,6 +65,14 @@ class LoadConfigTest(unittest.TestCase):
         with self.assertRaises(ConfigError) as caught:
             self.load(project, global_layer)
         self.assertIn(line, str(caught.exception))
+
+    def test_project_and_suite_in_a_path_are_their_folders(self):
+        project = dict(self.complete, paths=dict(self.complete["paths"], repo="{project}", repos=["{project}", "~/x"],
+                                                 grill_server="{suite}/tools"))
+        merged = self.load(project)
+        self.assertEqual(os.path.abspath(self.folder), merged["paths"]["repo"])
+        self.assertTrue(os.path.isfile(os.path.join(merged["paths"]["grill_server"], "install_team.py")))
+        self.assertEqual([os.path.abspath(self.folder), "~/x"], merged["paths"]["repos"])
 
     def test_the_project_file_wins_over_the_global_one_key_by_key(self):
         machine = {"port": 9000, "paths": {key: self.complete["paths"][key] for key in ("transcripts", "node")}}

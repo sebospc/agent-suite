@@ -15,7 +15,7 @@ from cockpit.not_used import NotUsed
 from cockpit.project_config.config_error import ConfigError
 from cockpit.project_config.config_schema import check_complete
 from cockpit.snapshot.snapshot_builder import SnapshotBuilder
-from tests.builders import FIXTURES, NOW, prices, team, thresholds
+from tests.builders import FIRST_PROJECT, FIXTURES, NOW, prices, team, thresholds
 from tests.test_snapshot import builder
 
 BEADS_CAT = [sys.executable, "-c", "import sys; sys.stdout.write(open(sys.argv[1]).read())", os.path.join(FIXTURES, "beads.sample.jsonl")]
@@ -61,7 +61,7 @@ class NoneAdaptersTest(unittest.TestCase):
 
 class NoneAdapterConfigTest(unittest.TestCase):
     def setUp(self):
-        self.config = project_config()
+        self.config = project_config(FIRST_PROJECT)
         self.paths = self.config["paths"]
 
     def without(self, *keys) -> dict:

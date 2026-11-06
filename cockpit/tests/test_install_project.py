@@ -6,6 +6,8 @@ import sys
 import tempfile
 import unittest
 
+from tests.builders import FIRST_PROJECT
+
 from tests.builders import ROOT
 
 INSTALLER = os.path.join(ROOT, "tools", "install_project.py")
@@ -23,7 +25,7 @@ class InstallProjectTest(unittest.TestCase):
         os.makedirs(os.path.join(self.project, ".claude"))
         self.settings = os.path.join(self.project, ".claude", "settings.json")
         self.backup = self.settings + ".cockpit-backup"
-        with open(os.path.join(ROOT, ".cockpit.json"), encoding="utf-8") as handle:
+        with open(os.path.join(FIRST_PROJECT, ".cockpit.json"), encoding="utf-8") as handle:
             config = json.load(handle)
         config["paths"].update(usage=os.path.join(self.home, "usage.json"), pause_file=os.path.join(self.home, "paused"))
         self.write(os.path.join(self.project, ".cockpit.json"), json.dumps(config).encode())
