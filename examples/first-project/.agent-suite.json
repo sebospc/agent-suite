@@ -1,0 +1,19 @@
+{
+  "_note": "The first project's team config, kept as an example: about ten sessions on one machine, beads, a panel, Engram, herdr, an iOS simulator and an Android emulator.",
+  "board_dir": "~/.agent-board",
+  "session_prefix": "agent-",
+  "lead": "brain",
+  "coordinator": "coordinator",
+  "team_json": "team.json",
+  "engram_project": "acme",
+  "slots": {"ios-sim": {"minutes": 30}, "android-emulator": {"minutes": 30}},
+  "courier": {"idle_minutes": 10, "cooldown_minutes": 30, "always_watched": ["coordinator"]},
+  "team_check": {"stale_hours": 3},
+  "snapshot": {"remote": "git@github.com:owner/agent-board.git", "clone": "~/.agent-board-snapshot",
+               "memory_dirs": {"memory": "~/.claude/projects/-Users-me-Documents-project/memory"}},
+  "parts": {
+    "cockpit": "as-is", "panel": "as-is", "messages": "as-is", "saved-guard": "as-is", "receipts": "as-is",
+    "pause": "as-is", "memory": "adapted", "queue": "as-is", "slots": "as-is", "snapshot": "as-is",
+    "team-check": "adapted", "launcher": "adapted", "protocol": "adapted", "rules": "adapted"
+  }
+}

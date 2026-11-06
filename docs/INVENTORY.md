@@ -1,71 +1,69 @@
-# Agent suite: what it has, what we took from gentle-ai, how we use Engram
+# What the suite offers
 
-Draft, 2026-11-07. A suite for running a team of long-lived coding agent sessions on one machine: one cockpit page, an autopilot that manages tokens, guards on messages and asks, a memory layer, and a config per project. Nothing here names the project it was built on.
+A suite for running a team of long-lived coding agent sessions on one machine. Every part is optional and each
+project picks it as is, adapted, or not at all. `parts.json` is the full list with needs, config, install, verify,
+uninstall and what leaves the machine; this page says what each part is for. What one project chose is in
+`examples/first-project/`.
 
-## 1. What the suite has today
+## 1. Parts
 
-| Part | What it does | Adapts per project through |
+| Part | For | Adapts per project through |
 |---|---|---|
-| Cockpit page | Current milestone with its goal metric first, what each session does now, the open asks answered in an embedded grill round, where tokens go | `.cockpit.json` (paths, team, port), merged over the user config and checked at start |
-| Autopilot | Rules the owner turns on one by one: compact idle sessions over their sweet spot; compact at the next finished turn over the ceiling; keep a cheap-model session under its price step (100k); clear at task end; keep the cache warm across short idle gaps; relaunch a dead session | Rule switches and thresholds in config |
-| Sweet spot and compaction model | Per session: where compaction costs least, from measured turn sizes, the price card, cache rebuild cost and the cost to recover context by role | Price table, per-role recovery numbers |
-| Idle cost | Prices each idle gap under several policies (today, cap 1, break-even, always compact), so the policy comes from numbers | Policies in config |
-| Prices | Reads the provider's price page and flags a change | Price source per provider |
-| Metrics and quota | Token use per session and account | None |
-| Refit | Learns thresholds back from what happened | Bounds in config |
-| Task classifier | Labels a session's task kind, with a shadow mode before it acts | Classifier adapter (real or fake) |
-| Controls | Compact, clear, effort, pause the team; each one checks on screen that it took effect | Permission rules |
-| Pause switch | One file pauses every session; a guard hook enforces it | Hook wrapped into the project's settings |
-| Health lights | Machine (free memory, swap, orphan processes, tool versions), memory store health, docs age | Thresholds in config |
-| Installer | `tools/install_project.py` and a setup skill: writes the project config, wraps the status line and the pause guard into the project's settings, keeps a backup, can uninstall | Runs once per project |
+| cockpit | One local page: the milestone and its goal metric first, what each session does now, the owner's open asks answered in a grill round, where tokens go, health lights | `.cockpit.json` (paths with `{project}` and `{suite}`, team, port), merged over the user config and checked at start |
+| cockpit autopilot | Rules the owner turns on one by one: compact idle sessions over their sweet spot, compact at the next finished turn over the ceiling, keep a cheap-model session under its price step, clear at task end, keep the cache warm across short idle gaps, relaunch a dead session | Rule switches and thresholds in `cockpit/config/thresholds.json` |
+| cockpit sweet spot and idle cost | Per session, where compaction costs least, from measured turn sizes, the price card and the cost to rebuild context; each idle gap priced under several policies | Prices, per-role recovery numbers; `cockpit/research/scripts/` to calibrate |
+| panel | Every question to the owner on one panel, with options, a recommendation and a why; guards keep asks off chat and the panel file safe | `board_dir` |
+| messages | One event, one recipient; real counts in result lines; relays quoted word for word | `docs/PROTOCOL.md` |
+| saved-guard | A reply that claims a save or a landing must name it | none |
+| receipts | Frozen-patch receipts and a check that the landed commit is the reviewed one | none |
+| pause | One file pauses every session | `board_dir` |
+| memory | Engram as the team's memory: rules, a save nudge, the after-compaction summary, a migration from markdown files | `engram_project`, `docs/RULES.md` |
+| queue | Tickets in flight and next per session; one ticket per session as a hard block; a courier that hands the next one | `courier.*`, `session_prefix` |
+| slots | Named resources, one holder at a time with a waiting line | `slots` |
+| snapshot | The board, tickets and memory copied to a private repo behind a secret scan | `snapshot.*` |
+| team-check | One line per team-order finding, exit 1, so a timer wakes the coordinator only then | `team_check.stale_hours` |
+| launcher | Session name from the pane label, the role's launch flags, saved flags on resume | `team.json`, `session_prefix` |
+| protocol | Roles, message types, the lead-coordinator flow, review by risk, a prompt template per role | `templates/roles/` |
+| rules | Ready-to-paste rule text for every idea in section 2 | `docs/RULES.md` |
 
-Team tools that live in the project today and would move into the suite:
+Project config for the team tools: `.agent-suite.json` in the project folder (keys in `tools/team/suite_config.py`).
+Check an adoption with `python3 tools/doctor.py DIR`.
 
-| Tool | What it does |
-|---|---|
-| Ask panel (`ask_owner.py`, `panel_wait.py`) | Every question to the owner goes on one panel with options, a recommendation and a why; one waiter reports answers |
-| Send guard | One event, one recipient; a result line must carry counts; a relay must quote the author word for word |
-| Owner-ask guard | Blocks a reply that asks the owner something without a panel ask |
-| Memory nudge | Reminds a session to save after 15 minutes without a save; after a compaction it asks for a session summary and a fresh role state |
-| Landing receipt (`verify_landing.py`) | A landed commit must match the reviewed frozen patch: tree, message, patch-id, no tool attribution |
-| Board snapshot | Copies the task board and memory to a private repo after each push; a secret scan blocks it, with an allowlist of checked false positives |
-| Task queue | One file of tickets in flight and the next per session, with device slots granted one at a time |
+## 2. gentle-ai ideas and where the suite has them
 
-## 2. gentle-ai ideas: used or not
+Each project chooses idea by idea: gentle-ai as it is, the suite's version, or another tool.
 
-Each project chooses for itself, idea by idea: gentle-ai as it is, the adapted version described here, or another tool. The suite offers the choice in the project config and never imposes one. The table records what the first project chose.
+| # | Idea | In the suite |
+|---|---|---|
+| 1 | Memory the agent reaches for first (save, search before asking, summary after compaction) | memory part; `docs/RULES.md` 1 |
+| 2 | One recoverable doc per substantial task, the owner's words verbatim | `docs/RULES.md` 2 |
+| 3 | Delegate only for a named reason | `docs/RULES.md` 3 |
+| 4 | Evidence budget (a quick decision in about 3 calls and 10k tokens) | `docs/RULES.md` 4 |
+| 5 | Test first, per rule asked | `docs/RULES.md` 5; receipts part |
+| 6 | Receipts on a frozen candidate, depth by risk, one fix round | receipts part; `docs/PROTOCOL.md` "Review by risk"; `docs/RULES.md` 6 |
+| 7 | Deterministic next step (a program picks it, not a model) | queue part (task queue and courier); `docs/RULES.md` 7 |
+| 8 | Lossless blocking prompts | panel part; `docs/RULES.md` 8 |
+| 9 | Skills loaded on match | `docs/RULES.md` 9 |
+| 10 | Doctor, deny-list, backups | `tools/doctor.py`; installers back up before writing; `docs/RULES.md` 10 |
+| 11 | Four public states (working, checking, ready, needs you) | `docs/RULES.md` 11; the cockpit's session states and needs-you row |
+| - | Compaction hook (summary right after compaction) | memory part |
+| - | Two layers: rules in the guide plus blocking hooks for rules broken twice | every guard part; `docs/RULES.md` "Two layers" |
+| - | Cloud sync off by default | memory part; `tools/doctor.py` flags `ENGRAM_CLOUD_AUTOSYNC` |
+| - | One store, topic prefixes per role | `docs/RULES.md` 1, Engram conventions |
+| - | Design canvas with comments pinned on an element (Gentle Shell) | not in the suite |
 
-| # | Idea | Status | How we use it, or what is missing |
-|---|---|---|---|
-| 1 | Memory the agent reaches for first (save, search before asking, summary after compaction) | Used | Engram, section 3 |
-| 2 | One recoverable doc per substantial task, the owner's words verbatim | Partly | The ticket and the decision log carry the owner's words; task messages point to the ticket. No rule yet for a doc per ticket |
-| 3 | Delegate only for a named reason | Used | Separate long-lived sessions per role; subagents not used for routine work |
-| 4 | Evidence budget (a quick decision in about 3 calls and 10k tokens) | Not yet | Not written as a rule |
-| 5 | Test-first per rule asked | Partly | Every logic change leaves one test that fails without it; mutants checked in review. Not written test-first |
-| 6 | Receipts on a frozen candidate, depth by risk, one fix round | Used | Frozen read-only patch with hashes and patch-id; review depth by risk (prod code, security, owner quotes); a HOLD gets one fix round; the landing receipt checks the commit |
-| 7 | Deterministic next step (a program picks it, not a model) | Not yet | The next ticket is still picked by hand from the queue |
-| 8 | Lossless blocking prompts | Used | Panel asks keep every option, label and order |
-| 9 | Skills loaded on match | Used | Skills per kind of task; only the matching one enters context |
-| 10 | Doctor, deny-list, backups | Partly | Health lights and secret scan; config backups before writes. No single read-only doctor command |
-| 11 | Four public states (working, checking, ready, needs you) | Partly | The cockpit shows session states and a needs-you row, not exactly these four |
-| - | Compaction hook (summary right after compaction) | Used | The memory nudge on compaction |
-| - | Two layers: memory rules plus blocking hooks for rules broken twice | Used | Send guard, owner-ask guard, pause guard |
-| - | Cloud sync off by default | Used | Memory store sync is off; nothing leaves the machine |
-| - | One store, topic prefixes per role | Used | `role/<role>/state` and `rule/<topic>` keys |
-| - | Design canvas with comments pinned on an element (Gentle Shell) | Partly | One typed change under a drawn card; no pinned comments yet |
+## 3. How the suite uses Engram
 
-## 3. How we use Engram
+- One local store for the team. Every save carries a topic key: `rule/<topic>`, `role/<role>/state`,
+  `project/<topic>`, `ref/<topic>`, `archive/role/<role>/state` (`docs/RULES.md` 1).
+- Save right after a decision, a fix or a lesson; a role state after each step; a session summary after every
+  compaction (the memory part's hook asks for it). Search before acting on a rule you are unsure of.
+- A save that may contradict an old one asks for a judgment; each candidate gets a verdict.
+- Pinned memories load at every session start, one line each, so the titles must carry the rule.
+- Cloud sync stays off; nothing leaves the machine.
 
-- What: one local store, every session saves with a topic key: `rule/<topic>` for a rule, `role/<role>/state` for where a role stands, `project/...` and `ref/...` for facts.
-- When: right after a decision, a fix or a lesson; a role state after each step; a session summary after every compaction (hook). Search before acting on a rule you are unsure of.
-- Conflicts: a save that may contradict an old one asks for a judgment; each candidate gets a verdict (related, not a conflict, supersedes).
-- Start of session: pinned memories load as context, compacted to one line each so all of them fit.
-- Numbers on 2026-11-07: 312 memories (240 rules, 19 project, 17 ref, 14 role, 8 archived), 70 pinned, 13 role states, 13 session summaries, 376 judged relations. In the last 2 days, 12 sessions made 189 searches and 437 saves (most saves come from the one-time migration of the old memory files).
-- Gap: searches are still uneven between roles; a few roles rarely search before acting.
+## 4. Open
 
-## 4. Open before it is a suite
-
-1. Move the team tools of section 1 out of the project into the suite, each behind the project config.
-2. Strip every project name from code, docs and fixtures; a check in CI that fails on one.
-3. Write ideas 2, 4 and 7 as rules or code, or decide not to.
-4. One read-only doctor command over the health lights.
+1. Run `tools/check_no_project_names.py` in CI once the repo has CI.
+2. The cockpit still names a few first-project facts in its docs (the history of its rules); the code reads every
+   project fact from `.cockpit.json`.

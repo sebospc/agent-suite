@@ -1,11 +1,8 @@
 # Cockpit
 
-A local HTML cockpit for the owner of an agent team: about ten long-running Claude Code
-sessions (brain, coordinator, reviewers, ai, ios, android, format, backend, design) on one Mac,
-in herdr panes, on several Claude accounts rotated by cswap and a balancer.
-
-It replaces the roadmap panel (a Claude Code mod). The owner stops using the panel once the
-cockpit answers asks.
+A local HTML cockpit for the owner of an agent team: long-running Claude Code sessions (a lead, a
+coordinator, reviewers, workers) on one machine, in herdr panes. It was built for a team of about ten
+sessions; `examples/first-project/` at the suite's root has that team's config.
 
 Status: phase 0 scripts and the phase 1 read-only cockpit are built (`docs/PLAN.md`). Run it with `python3 cockpit.py`
 (`docs/RUNNING.md`). Start at `CLAUDE.md`.
@@ -35,7 +32,9 @@ Status: phase 0 scripts and the phase 1 read-only cockpit are built (`docs/PLAN.
 | `docs/TEAM_DEPENDENCIES.md` | Changes the team (brain) must make for some features |
 | `docs/PLAN.md`, `docs/RUNNING.md` | Phase 0 and 1 plan; how to run and check it on the Mac |
 | `cockpit.py`, `cockpit/`, `page/`, `config/` | The cockpit: entry point, core and adapters by feature, the page, thresholds and prices |
-| `.cockpit.json` | the project's project config (paths, team, port), merged over `~/.config/cockpit/config.json` and checked at start (`docs/RUNNING.md`) |
+| `.cockpit.json` | The neutral default config (paths with `{project}` and `{suite}`, team, port), the start of a project's own `DIR/.cockpit.json`; merged over `~/.config/cockpit/config.json` and checked at start (`docs/RUNNING.md`) |
+| `docs/REQUIREMENTS.md`, `docs/CALIBRATION.md` | Every element with its purpose; how each threshold was calibrated |
+| `research/scripts/` | The calibration scripts (`research/README.md`) |
 | `tools/install_project.py`, `.claude/skills/cockpit-setup/` | Adapt the cockpit to another project: its `.cockpit.json`, then the status line and pause guard wrapped into its `.claude/settings.json`, with a backup and an uninstall |
 | `tests/` | `python3 -m unittest discover -s tests -t .` |
 | `fixtures/` | Real-format samples: panel.json, dod.json, goal.json, stack.json, beads, a transcript |
