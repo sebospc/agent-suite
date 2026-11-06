@@ -3,7 +3,7 @@
 moves it to `answered` with the owner's words, so no question is ever lost or deleted.
 
   ask_owner.py add "<text, at most 2 lines>" --kind blocker|design --by <session> \
-      --option "A" --option "B" [--bead pg-x] [--reply "<context>"] [--image <png>] \
+      --option "A" --option "B" [--bead t-12] [--reply "<context>"] [--image <png>] \
       [--covered "key: value (default)"]... [--fixed "reason: what"]... [--not-covered "what: reason"]...
 
 A bead left blocked or pending because it needs the owner names its unblocking action here with --bead
@@ -16,14 +16,12 @@ import fcntl
 import hashlib
 import json
 import os
-import subprocess
 import sys
 from datetime import datetime, timezone
 
 PANEL = os.environ.get("AGENT_PANEL", os.path.expanduser("~/.agent-board/panel.json"))
 LOCK = PANEL + ".lock"
 KINDS = ("blocker", "design")
-NOTICE = os.path.expanduser("~/Documents/agent-suite/cockpit/bin/answer_notice.py")  # the panel hides any other kind
 
 
 def now():
@@ -91,15 +89,6 @@ def answer(args):
         bead = match[0].get("bead")
         return f"answered {args.id}" + (f"; now unblock {bead}" if bead else "")
     print(edit(move))
-    notify(args.id)
-
-
-def notify(ask):
-    """Brain and the asker get the answer at once through the cockpit's outbox (pg-jzva: pushed, not polled). A sandbox
-    panel (AGENT_PANEL) queues nothing into the real outbox."""
-    return  # the cockpit's outbox was removed 2026-10-19; sessions read answers themselves
-    done = subprocess.run([sys.executable, NOTICE, ask], capture_output=True, text=True)
-    print((done.stdout or done.stderr).strip() or f"answer notice exited {done.returncode}", file=sys.stdout if done.returncode == 0 else sys.stderr)
 
 
 def show(_):

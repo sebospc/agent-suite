@@ -1,4 +1,4 @@
-# PreToolUse hook (pg-nplt): while the pause file exists, the team commits, pushes, claims, messages and runs
+# PreToolUse hook: while the pause file exists, the team commits, pushes, claims, messages and runs
 # nothing. On 2026-10-16 the team kept working under a pause because only a file said so. Each denial is logged.
 import json
 import os

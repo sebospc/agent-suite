@@ -1,5 +1,5 @@
 # What a SendMessage body must hold, for send_guard.py: root CLAUDE.md rule 3 (real counts, never "tests pass") and
-# relays word for word (the coordinator summarised a peer on 2026-11-05; calibration mb-5558, owner panel a351d8).
+# relays word for word (the coordinator summarised a peer on 2026-11-05).
 import json
 import re
 

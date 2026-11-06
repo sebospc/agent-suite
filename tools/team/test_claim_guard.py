@@ -1,4 +1,4 @@
-# python3 -m unittest discover -s tools -p 'test_claim_guard.py': the Stop hook for unnamed claims (mb-5558).
+# python3 -m unittest discover -s tools -p 'test_claim_guard.py': the Stop hook for unnamed claims.
 import json
 import subprocess
 import sys
@@ -23,8 +23,8 @@ class ClaimGuardTest(unittest.TestCase):
 
     def test_a_claim_that_names_a_sha_a_bead_or_a_file_goes_through(self):
         self.assertIsNone(verdict(turn("Landed in 89300a9a5.")))
-        self.assertIsNone(verdict(turn("Saved on bead mb-qhks.5.")))
-        self.assertIsNone(verdict(turn("Saved to ~/Documents/project-calibration/PLAN.md.")))
+        self.assertIsNone(verdict(turn("Saved on bead ab-qhks.5.")))
+        self.assertIsNone(verdict(turn("Saved to ~/notes/PLAN.md.")))
 
     def test_a_reply_with_no_claim_goes_through(self):
         self.assertIsNone(verdict(turn("The reviewer is still reading phase 2.")))
@@ -38,6 +38,21 @@ class ClaimGuardTest(unittest.TestCase):
         done = subprocess.run([sys.executable, str(guard)], input=json.dumps({"transcript_path": "/no/such/file"}),
                               capture_output=True, text=True, check=False)
         self.assertEqual((done.returncode, done.stdout), (0, ""))
+
+    def test_a_dash_word_is_not_a_bead_id(self):
+        self.assertIsNotNone(verdict(turn("Landed the follow-up.")))
+
+    def test_a_held_reply_is_logged_for_the_cockpit(self):
+        import tempfile
+        folder = Path(tempfile.mkdtemp())
+        transcript, log = folder / "t.jsonl", folder / "saved.jsonl"
+        transcript.write_text("\n".join(json.dumps(entry) for entry in turn("I saved it.")) + "\n")
+        done = subprocess.run([sys.executable, str(Path(__file__).with_name("claim_guard.py"))],
+                              input=json.dumps({"transcript_path": str(transcript)}), capture_output=True, text=True,
+                              env={"AGENT_SAVED_LOG": str(log), "AGENT_SESSION": "agent-ios", "PATH": "/usr/bin:/bin"})
+        self.assertIn('"block"', done.stdout)
+        self.assertEqual({"session": "agent-ios", "text": "I saved it."},
+                         {k: v for k, v in json.loads(log.read_text()).items() if k != "t"})
 
 
 if __name__ == "__main__":

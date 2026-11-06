@@ -1,4 +1,4 @@
-# The GO-REQ "guards" line (mb-5558): slips reviewers caught by hand more than once, read from the patch, no test run.
+# The GO-REQ "guards" line: slips reviewers caught by hand more than once, read from the patch, no test run.
 import re
 
 FILE_HEADER = re.compile(r"^diff --git a/\S+ b/(\S+)$")
