@@ -12,7 +12,7 @@ FILE_NAME = ".agent-suite.json"
 DEFAULTS = {
     "board_dir": "~/.agent-board",
     "session_prefix": "agent-",
-    "lead": "brain",
+    "lead": "lead",
     "coordinator": "coordinator",
     "team_json": "team.json",
     "slots": {},

@@ -1,0 +1,9 @@
+{
+  "_note": "One entry per session, keyed by session name (or bare role; the prefix is added). model and effort are what the cockpit shows and the autopilot uses when it relaunches; window is the context window in tokens (200000 or 1000000); launch is the flags a fresh launch gets in the role's pane; role is one line on what the session is for; template is the file in templates/roles/ its prompt starts from; writes is its folders.",
+  "sessions": {
+    "agent-lead": {"model": "opus", "effort": "high", "window": 1000000, "launch": ["--model", "opus"], "template": "lead", "role": "Sets order and priorities, lands reviewed patches, keeps the owner's decisions", "writes": ["docs/", "tools/"]},
+    "agent-coordinator": {"model": "sonnet", "effort": "medium", "window": 200000, "launch": ["--model", "sonnet"], "template": "coordinator", "role": "First point of contact; keeps the board and the panel in order", "writes": []},
+    "agent-reviewer": {"model": "opus", "effort": "high", "window": 200000, "launch": ["--model", "opus"], "template": "reviewer", "role": "Reviews frozen patches, answers GO or HOLD", "writes": []},
+    "agent-app": {"model": "sonnet", "effort": "high", "window": 200000, "launch": ["--model", "sonnet"], "template": "worker", "role": "Builds the app", "writes": ["app/"]}
+  }
+}
