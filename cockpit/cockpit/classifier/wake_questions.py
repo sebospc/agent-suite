@@ -1,6 +1,6 @@
 from cockpit.classifier.jev_classifier import yes_no
 
-# DECISIONS 2026-10-22 keep-warm rules: asked once per hour of an idle stretch, never per probe.
+# the first project's decision log, 2026-10-22 keep-warm rules: asked once per hour of an idle stretch, never per probe.
 WAKE_QUESTIONS = {
     "wakes_within_hour": yes_no("Will `session` get new work or a message within the next hour?",
                                 "A bead is in progress or waiting for it, other sessions depend on its answer, or the team is mid-task in working hours.",

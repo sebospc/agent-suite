@@ -11,7 +11,7 @@ const ICONS = {
 };
 const SOURCE_NAMES = { board: 'board (bd)', asks: 'panel.json', live: 'live sessions', accounts: 'cswap', balancer: 'balancer log',
   gate: 'gate', plan: 'team.json', tokens: 'daily tokens', transcripts: 'transcripts',
-  classifier: 'Jev', history: 'tokens per day', past: 'transcripts, 14 days', landed: 'commits today', decisions: 'DECISIONS.md', commits: 'commit ids' };
+  classifier: 'Jev', history: 'tokens per day', past: 'transcripts, 14 days', landed: 'commits today', decisions: 'decision log', commits: 'commit ids' };
 // A light names the box it opens; the core calls the sessions box "sessions".
 const BOX_OF_TAB = { milestone: 'milestone', sessions: 'sessions', asks: 'asks', accounts: 'accounts', jobs: 'jobs', needs: 'asks', health: 'health' };
 

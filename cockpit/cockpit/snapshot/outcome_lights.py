@@ -9,7 +9,7 @@ from cockpit.transcripts.session_stats import SessionStats
 WEEK = 7 * 86400
 OUTCOME_RULE = "WATCH when the owner marked a decision wrong or a clear lost work (its next session read the old files) in 7 days"
 USE_RULE = "WATCH when a session reached Claude Code's own compaction line in 24 h: the sweet-spot rule did not get there first"
-ELSEWHERE = ("DECISIONS gaps are under Said vs saved, stale memory under Memory, start-file reads in each session's start "
+ELSEWHERE = ("Decision-log gaps are under Said vs saved, stale memory under Memory, start-file reads in each session's start "
              "load; quota per finished task and docs against code have their own rows")
 
 

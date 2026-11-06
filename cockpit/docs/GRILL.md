@@ -2,7 +2,7 @@
 
 The owner: "(the owner's words)".
 
-grill-with-ui is the team's skill (`reference/grill-with-ui/`, also in the project repo
+grill-with-ui is the team's skill (in the project repo
 `.claude/skills/grill-with-ui/`; based on plannotator's interactive grill UI). It serves one local
 page per grill session; questions show their recommendation, lettered options, a discussion thread
 each, and a Send button.
@@ -48,6 +48,6 @@ no `rec`: show "no recommendation given" for them rather than inventing one.
 
 ## In the mockup
 
-`design/mockup/Main.dc.html`, section "Your asks": the pending list, "Answer these 3 in a grill
+`page/sections.js`, section "Your asks": the pending list, "Answer these 3 in a grill
 round", and a simulated embedded grill with three real items from the Oct 15 board (ask 696253, and
 beads pg-a18q.30 and pg-a18q.51 that had no ask).

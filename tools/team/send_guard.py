@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# PreToolUse, PostToolUse and PostToolUseFailure on SendMessage: one event, one recipient (docs/WORKFLOW.md "Messages"),
+# PreToolUse, PostToolUse and PostToolUseFailure on SendMessage: one event, one recipient (docs/PROTOCOL.md),
 # plus message_rules.py's body rules. Fails open on every error: only exit 2 blocks, so a guard bug never stops a message.
 import fcntl
 import json
@@ -105,7 +105,7 @@ def blocking_reason(records: list[dict], send: dict, now: datetime) -> str | Non
     if delivered_to:
         return (
             f"send_guard: {sender!r} already sent {key!r} to {delivered_to!r}; one event goes to one recipient "
-            f"(docs/WORKFLOW.md Messages). Resend it to {delivered_to!r}, or give a new event a new version."
+            f"(docs/PROTOCOL.md). Resend it to {delivered_to!r}, or give a new event a new version."
         )
     failed_ids = {record["tool_use_id"] for record in others if record["state"] == FAILED}
     pending_ages = [
@@ -119,7 +119,7 @@ def blocking_reason(records: list[dict], send: dict, now: datetime) -> str | Non
     wait = math.ceil((PENDING_WINDOW - youngest).total_seconds())
     return (
         f"send_guard: {sender!r} is sending {key!r} to {pending_to!r} with no result yet; one event goes to one "
-        f"recipient (docs/WORKFLOW.md Messages). A send with no result blocks other recipients for at most "
+        f"recipient (docs/PROTOCOL.md). A send with no result blocks other recipients for at most "
         f"{PENDING_WINDOW.seconds} s: resend in {wait} s, or send it to {pending_to!r} now."
     )
 

@@ -63,7 +63,6 @@ AUTOPILOT_RULES = [  # the conditions themselves are in cockpit/autopilot/rules.
      "short": "Types one short prompt into an idle session so its cache does not expire",
      "when": "Near its cache's expiry, at or under {value}x its sweet spot, up to the count where probes cost what a rewrite or a compaction would, when Jev expects it to wake"},
 ]
-DECISIONS_WRITER = "brain"  # CLAUDE.md rule 8: brain carries the owner's answers into DECISIONS.md
 HISTORY_DAYS = 14  # two weeks: this week against last week, and the Jev record's outcomes
 
 
@@ -87,7 +86,8 @@ class SnapshotBuilder:
     age, and a source that fails is named with its error instead of showing as zero."""
 
     def __init__(self, ports: Ports, team: Team, thresholds: Thresholds, prices: PriceTable, budget_s: float,
-                 hook_logs: Optional[dict] = None, docs_skipped: Optional[List[str]] = None):
+                 hook_logs: Optional[dict] = None, docs_skipped: Optional[List[str]] = None,
+                 decision_log: str = "docs/DECISIONS.md", decisions_writer: str = "lead"):
         self.ports = ports
         self.prices = prices
         self.team = team
@@ -96,6 +96,8 @@ class SnapshotBuilder:
         self.tree: Optional[BeadTree] = None  # the last board read, so a bead opens without another bd call
         self.hook_logs = hook_logs or {}
         self.docs_skipped = list(docs_skipped or [])
+        # The session that carries the owner's answers into the decision log (team.decisions_writer).
+        self.decision_log, self.decisions_writer = decision_log, decisions_writer
         self.docs_read: tuple = (0.0, None)  # (when, stale docs): git log and the docs are read once an hour
         self.wrongs: Dict[str, list] = {}
         self.week: Dict[str, dict] = {}
@@ -119,7 +121,7 @@ class SnapshotBuilder:
                 "balancer": lambda: p.balancer_log.since(now - 86400), "gate": p.git.gate, "plan": p.team_plan.read,
                 "tokens": lambda: p.transcripts.daily_tokens(day_starts(now)),
                 "landed": lambda: p.git.commits_since(day_starts(now)[1]),
-                "decisions": lambda: p.git.committed_text("docs/DECISIONS.md"),
+                "decisions": lambda: p.git.committed_text(self.decision_log),
                 "pause": p.pause.since,
                 "guard": lambda: p.saved_guard.since(day_starts(now)[1]),
                 "disk": p.disk.read,
@@ -209,7 +211,7 @@ class SnapshotBuilder:
                               {name: {"saved": st.saved_without_id, "places": st.saved_places} for name, st in named.items()},
                               {k: got[k].get("error", "") for k in ("decisions", "landed")}, value(got, "guard"))
         for row in rows:
-            if row["name"] == DECISIONS_WRITER:
+            if row["name"] == self.decisions_writer:
                 row["unsaved_answers"] = [a["id"] for a in saved["not_in_decisions"]]
         # Team health (the owner, 2026-10-16): the team's resources, one row each; what needs the owner is in Your tasks.
         health = [tokens_light(value(got, "tokens"), tokens), context_light(rows), memory_light(rows), said_light(saved, need_dicts),

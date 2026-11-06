@@ -66,7 +66,7 @@ def capped(gap: IdleGap, cap: int, fallback: Spend, card: PriceCard, ttl: int, r
 
 def alternative(gap: IdleGap, card: PriceCard, ttl: int, inputs: SweetSpotInputs, spot: SweetSpot) -> Spend:
     """What a probe is weighed against: the cheaper of letting the cache go cold and compacting at the idle point
-    (docs/DECISIONS.md 2026-10-22, da7c4a, and the owner's "si un compact es 20 probes")."""
+    (the first project's decision log, 2026-10-22, da7c4a, and the owner's "si un compact es 20 probes")."""
     return min(cold(gap, card, ttl), idle_compact(gap, card, inputs, spot), key=lambda spend: spend.usd)
 
 

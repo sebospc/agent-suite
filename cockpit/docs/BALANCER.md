@@ -1,7 +1,7 @@
 # The cswap balancer
 
-Code: `reference/balancer/` (lives on the Mac in `~/.claude/handoff`, with shell wrappers in fish and
-zsh). Read `reference/balancer/README.md` and `pick_account.py`. The cockpit only reads it; changes to
+Code: the balancer lives on the Mac in `~/.claude/handoff`, with shell wrappers in fish and
+zsh, outside this repo. The cockpit only reads it; changes to
 it go through brain.
 
 ## What it does

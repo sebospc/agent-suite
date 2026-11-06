@@ -7,7 +7,7 @@ A local web app on the owner's Mac, no install step:
   the view model, keeps history in SQLite (stdlib `sqlite3`).
 - `server`: Python stdlib `http.server` bound to `127.0.0.1` only; serves the page, `GET /api/snapshot`,
   and in phase 2 `POST /api/action` for the whitelisted controls.
-- `page`: one static HTML file with plain JS, built from `design/mockup/Main.dc.html` (or the
+- `page`: one static HTML file with plain JS, built from the first project's mockup (or the
   layout the owner picks). It polls the snapshot and renders; it never computes business rules.
 - Start: `python3 cockpit.py` (prints the url).
 
@@ -59,12 +59,12 @@ for every source, Command for each control (execute + verify + log), Template me
 | 0. Calibration (half a day on the Mac) | Run `research/scripts/measure_context.py` on the real transcripts: g, y, P, F_s per session; compactions seen; Haiku requests over 100k. Fit quota weighting from `usage-samples.jsonl` | The numbers per session and the weighting are written to `docs/CALIBRATION.md` |
 | 1. Read-only cockpit + answering asks | Needs you, milestone with 7 checks, sessions with working-on and sweet spot, accounts, autopilot log (empty), asks with the embedded grill | For 3 numbers per section, a manual check on the Mac matches; answering an ask moves it to `answered` with the owner's words |
 | 2. Controls | Compact, clear at task end, effort, apply window via team.json, pause (needs team dependency 7) | Each control shows its before and after on screen, from the source, not from its own claim |
-| 3. Autopilot and history | The two autopilot rules; history trends (milestone share of tokens per session per day); task classification with Jev (the owner's choice, `BRIEF.md`), first in shadow mode | A week of the autopilot log with actions and tokens saved |
+| 3. Autopilot and history | The two autopilot rules; history trends (milestone share of tokens per session per day); task classification with Jev (the owner's choice), first in shadow mode | A week of the autopilot log with actions and tokens saved |
 
 ## Tests
 
 - Fakes for every port; fixtures in `fixtures/` for the board and transcript formats.
 - One test per rule that fails if the rule breaks (each milestone check, each Needs you light, the
-  sweet-spot math against the verifier's numbers in `research/raw/compaction-model.json`).
+  sweet-spot math against the verifier's numbers (the first project's research data, not in this repo)).
 - Report counts as `N passed, M failed, K skipped`.
 - Run: `python3 -m unittest discover -s tests -t .` from the repo root (stdlib only).

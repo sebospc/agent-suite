@@ -6,7 +6,7 @@ PEER_PREFIX = "<cross-session-message"  # the receiver's line for a message from
 PEER_WRAPPER = "Another Claude session sent a message:"  # Claude Code puts it before the tag; since 2026-10-11 on almost every one
 PEER_BODY = re.compile(r"<cross-session-message[^>]*>(.*?)(?:</cross-session-message>|$)", re.S)
 COMMAND = re.compile(r"^\s*(?:<command-name>|/[a-z])")
-# the project's docs/WORKFLOW.md "Messages": line 1 is `<TYPE> <bead> [vN]`, at most 10 lines.
+# docs/PROTOCOL.md in the suite: line 1 is `<TYPE> <bead> [vN]`, at most 10 lines.
 TYPES = {"TASK", "GO-REQ", "GO", "HOLD", "VERIFY-REQ", "VERIFIED", "SEC-REQ", "SEC", "LAND-READY", "LANDED", "PUSHED",
          "SLOT-REQ", "SLOT-FREE", "BLOCKED", "RULING-REQ", "RULING", "BOUNCE"}
 FIRST_LINE = re.compile(r"^([A-Z][A-Z-]+)\s+((?:pg|mb)-[a-z0-9]{3,5}(?:\.\d+)*)(?:\s+v\d+)?\s*$")

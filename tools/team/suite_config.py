@@ -15,6 +15,7 @@ DEFAULTS = {
     "lead": "lead",
     "coordinator": "coordinator",
     "team_json": "team.json",
+    "engram_project": "",
     "slots": {},
     "courier": {"idle_minutes": 10, "cooldown_minutes": 30, "always_watched": ["coordinator"]},
     "team_check": {"stale_hours": 3},

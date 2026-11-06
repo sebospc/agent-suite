@@ -17,7 +17,7 @@ CLEAR_AT_END = "Clear at task end"
 
 def nothing_to_lose(row: dict) -> bool:
     """Its notes were saved during its last turn, or it holds no bead in progress whose work a clear could drop;
-    and, for brain, every answer of the owner is already in DECISIONS.md, since a clear forgets that it still owes them."""
+    and, for brain, every answer of the owner is already in the decision log, since a clear forgets that it still owes them."""
     saved = row["notes_saved"] is True or (row["notes_saved"] is None and not row["holds"])
     return saved and not row.get("unsaved_answers")
 
@@ -29,7 +29,7 @@ def background_why(row: dict) -> str:
 
 def not_saved_why(row: dict) -> str:
     if row.get("unsaved_answers"):
-        return f"the owner's answer {', '.join(row['unsaved_answers'])} is not in DECISIONS.md yet"
+        return f"the owner's answer {', '.join(row['unsaved_answers'])} is not in the decision log yet"
     if row.get("notes_file"):
         return f"its state file {row['notes_file']} has not changed since its last turn started"
     return "its notes were not saved since its last turn started"
@@ -141,7 +141,7 @@ def decide(rows: List[dict], pending: Set[str], thresholds: Thresholds, now: flo
         if not thrashing(row, line) and not row.get("background"):
             # Unsaved notes hold neither compaction: waiting for them is how a session misses the window and goes cold
             # at full size, and the summary keeps the unsaved work (brain, pg-o1sq finding 3
-            # answer). Nor do the owner's answers still missing from DECISIONS.md: panel.json keeps his exact words, and
+            # answer). Nor do the owner's answers still missing from the decision log: panel.json keeps his exact words, and
             # the hold let brain grow to 400k on 2026-10-22 (panels f68cd6 to b31e2b). They still block a clear.
             if row.get("ceiling") and context >= row["ceiling"]:
                 # A session that works all day is never idle long enough for the expiry window (pg-45v5 ruling).

@@ -1,10 +1,10 @@
 # Data sources
 
 Everything the cockpit reads, where, in what format, and the traps. Formats for the board files are
-in `fixtures/` (real data, trimmed). Sources for the Claude Code facts: `research/raw/tools-and-sources.json`
+in `fixtures/` (real data, trimmed). Sources for the Claude Code facts: the first project's research
 (official docs read on 2026-10-15, Claude Code 2.1.301, plus verifier corrections).
 
-The panel (`reference/panel/team-roadmap/panel.py`) already reads most of these; reuse its working
+The first project's roadmap panel read most of these; the cockpit reuses its working
 details (timeouts on `bd`, herdr quirks), not its percent bar or mode buttons.
 
 ## Paths on the owner's Mac
@@ -81,7 +81,7 @@ details (timeouts on `bd`, herdr quirks), not its percent bar or mode buttons.
 
 - `cswap list --json` (read-only; run with `env -u CLAUDE_CONFIG_DIR`): per account `number`,
   `email`, `usage.fiveHour.{pct, resetsAt}`, `usage.sevenDay.{pct, resetsAt}`, `usageAgeSeconds`,
-  `usageStatus`, plan. Values are the server's; respect their age. See `reference/balancer/pick_account.py`.
+  `usageStatus`, plan. Values are the server's; respect their age. The balancer's `pick_account.py` writes them.
 - The balancer's decision log does not exist yet (see `TEAM_DEPENDENCIES.md`).
 
 ## Board

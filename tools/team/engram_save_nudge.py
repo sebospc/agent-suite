@@ -16,12 +16,20 @@ QUIET_SECONDS = 900
 SAVE_TOOLS = ("mcp__engram__mem_save", "mcp__engram__mem_update", "mcp__engram__mem_session_summary")
 NUDGED = suite_config.board_file("AGENT_ENGRAM_NUDGED", "engram-nudged")
 
-NUDGE = ("MEMORY REMINDER (docs/WORKFLOW.md \"Memory\"): 15 minutes or more since this session's last Engram save. "
+NUDGE = ("MEMORY REMINDER: 15 minutes or more since this session's last Engram save. "
          "If you decided, fixed or learned something, or your state moved, mem_save it now "
          "(topic_key role/<role>/state or rule/<topic>).")
-AFTER_COMPACTION = ("AFTER COMPACTION (docs/WORKFLOW.md \"Memory\"): first call mem_session_summary in project project with "
+AFTER_COMPACTION = ("AFTER COMPACTION: first call mem_session_summary{project} with "
                     "the compacted summary above (Goal, Instructions, Discoveries, Accomplished, Next Steps, Relevant Files), "
                     "then rewrite your role/<role>/state, then go on.")
+
+
+def after_compaction() -> str:
+    try:
+        project = suite_config.load()["engram_project"]
+    except suite_config.ConfigError:
+        project = ""
+    return AFTER_COMPACTION.format(project=f" in project {project}" if project else "")
 
 
 def epoch(timestamp: str) -> float:
@@ -67,7 +75,7 @@ def nudged_recently(session_id: str, now: float) -> bool:
 
 def context_for(event: dict, now: float) -> str | None:
     if event.get("hook_event_name") == "SessionStart":
-        return AFTER_COMPACTION if event.get("source") == "compact" else None
+        return after_compaction() if event.get("source") == "compact" else None
     since = last_save_or_start(tail_lines(event["transcript_path"], TAIL_BYTES))
     if since is None or now - since < QUIET_SECONDS or nudged_recently(event.get("session_id", "unknown"), now):
         return None

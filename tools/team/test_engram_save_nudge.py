@@ -42,9 +42,15 @@ class EngramSaveNudgeTest(unittest.TestCase):
         self.assertEqual(nudge.NUDGE, self.prompt(lines, "s4"))
         self.assertIsNone(self.prompt(lines, "s4"))
 
-    def test_after_a_compaction_the_summary_is_saved_first(self):
-        self.assertEqual(nudge.AFTER_COMPACTION,
-                         nudge.context_for({"hook_event_name": "SessionStart", "source": "compact"}, NOW))
+    def test_after_a_compaction_the_summary_is_saved_first_in_the_configured_project(self):
+        import json
+        from unittest import mock
+        config = os.path.join(tempfile.mkdtemp(), ".agent-suite.json")
+        with open(config, "w") as handle:
+            json.dump({"engram_project": "acme"}, handle)
+        with mock.patch.dict(os.environ, {"AGENT_SUITE_CONFIG": config}):
+            text = nudge.context_for({"hook_event_name": "SessionStart", "source": "compact"}, NOW)
+        self.assertTrue(text.startswith("AFTER COMPACTION: first call mem_session_summary in project acme with "))
         self.assertIsNone(nudge.context_for({"hook_event_name": "SessionStart", "source": "startup"}, NOW))
 
 

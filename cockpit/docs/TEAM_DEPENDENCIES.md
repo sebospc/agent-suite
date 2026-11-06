@@ -23,7 +23,7 @@ part of the cockpit; until it lands the cockpit shows the gap honestly ("no reco
 Paste into brain's pane:
 
 ```
-brain: the owner decided (2026-10-16, cockpit docs/BRIEF.md): two team-side changes, cockpit docs/TEAM_DEPENDENCIES.md 7 and 11.
+brain: the owner decided (2026-10-16): two team-side changes, cockpit docs/TEAM_DEPENDENCIES.md 7 and 11.
 7  One off switch: when the owner says off (or on), run python3 ~/Documents/agent-suite/tools/team_pause.py off
    (or on); the team is off now, so run it once today. Then a pause hook: while ~/.agent-board/paused exists,
    block git commit, git push and bd claims (bd update --claim, status in_progress) in every session (PreToolUse
@@ -37,7 +37,7 @@ Reply with the bead id for each, or why not.
 ```
 
 Already decided with brain in the same conversation (beads exist on the board):
-- `pg-15yj` tools/go_req.py, script-written GO-REQ receipts.
+- the first project's script-written GO-REQ receipts.
 - `pg-208g` send guard: one event to one recipient (keyed on sender + line 1, sent log outside the
   session, fails open).
 - `pg-5zn3` `category:` line on HOLDs and a weekly count by message type.

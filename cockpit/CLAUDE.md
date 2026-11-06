@@ -1,7 +1,7 @@
 # Building the the project cockpit
 
-Read `README.md`, then the doc for the part you are working on. Do not scan
-`research/raw/` whole: it holds the sources behind the docs; open it only to check a claim.
+Read `README.md`, then the doc for the part you are working on. The calibration scripts are in
+`research/scripts/`.
 
 ## The owner
 
@@ -21,7 +21,7 @@ element means adding its row there first.
 
 ## Design rule
 
-The mockups in `design/` are the target. `docs/DESIGN.md` is the system they use and the
+The built page in `page/` is the target. `docs/DESIGN.md` is the system it uses and the
 anti-slop rules behind it (no-ai-slop, impeccable, better-ui, beUI motion). Keep the tokens,
 type, spacing and motion values exactly; they are not approximations.
 

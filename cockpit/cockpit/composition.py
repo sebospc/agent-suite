@@ -145,7 +145,8 @@ def real_app(log: Callable[[str], None], config: dict) -> CockpitApp:
     grill = GrillServer(paths["node"], paths["grill_server"], paths["repo"], SUBPROCESS_TIMEOUT_S)
     keeper = RoundKeeper(grill, asks, os.path.expanduser(paths["grill_doc"]), log)
     builder = SnapshotBuilder(ports, team, thresholds, price_table(), CYCLE_BUDGET_S, paths["hook_logs"],
-                              paths["docs_not_describing_code"])
+                              paths["docs_not_describing_code"], paths.get("decision_log", "docs/DECISIONS.md"),
+                              config["team"].get("decisions_writer", "lead"))
     action_log = ActionLogFile(paths["action_log"])
     panes = HerdrPanes(paths["herdr"], SUBPROCESS_TIMEOUT_S)
     controls = Controls(panes, clock, log, action_log)

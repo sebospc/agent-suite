@@ -4,7 +4,7 @@ from typing import Dict, Optional
 from cockpit.autopilot.rules import compaction_starts, idle_seconds
 from cockpit.thresholds import Thresholds
 
-# docs/REQUIREMENTS.md "Autopilot rules" 7; DECISIONS 2026-10-22 keep-warm rules.
+# docs/REQUIREMENTS.md "Autopilot rules" 7; the first project's decision log, 2026-10-22 keep-warm rules.
 KEEP_WARM = "Keep a cache warm with a probe"
 PROBE_TEXT = "Keep-warm check from the cockpit. Reply with the single word ok and do nothing else."
 PROBE_TURN_S = 300  # a one-word reply ends in seconds; one running past this counts as real work and resets the count, so it would probe more, not less
@@ -69,7 +69,7 @@ def probe_state(row: dict, probes: int, thresholds: Thresholds, now: float, read
 
 
 def verdict(row: dict, probes: int, forecast: Optional[dict], yes: float) -> dict:
-    """The table of DECISIONS 2026-10-22: context band x expected wake. act: probe, hold (nothing at all, the cache
+    """The table of the first project's decision log, 2026-10-22: context band x expected wake. act: probe, hold (nothing at all, the cache
     goes cold) or leave (the other rules decide: over its spot that is the compaction while the cache is warm)."""
     cap = row["keep_warm"]["cap"]
     if forecast is None:

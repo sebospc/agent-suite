@@ -1,5 +1,5 @@
 {
-  "_note": "Default cockpit config, a starting point for a project's .cockpit.json (the adopt skill copies it). {project} is the project's folder, {suite} this suite's. Merged over ~/.config/cockpit/config.json; unknown keys and wrong types stop the cockpit at start. One project's real config: examples/first-project/cockpit.json.",
+  "_note": "Default cockpit config, a starting point for a project's .cockpit.json (the adopt skill copies it). {project} is the project's folder, {suite} this suite's. Merged over ~/.config/cockpit/config.json; unknown keys and wrong types stop the cockpit at start. One project's real config: examples/first-project/.cockpit.json.",
   "port": 8765,
   "paths": {
     "_note": "Where the cockpit reads (cockpit/docs/DATA_SOURCES.md). Everything here is read only, except ask_owner.py answer, the controls typed into panes, and the cockpit's own folder ~/.cockpit.",
@@ -76,7 +76,8 @@
       "{project}/.mcp.json"
     ],
     "config_baseline": "~/.cockpit/config-baseline.json",
-    "prices_page": "https://platform.claude.com/docs/en/about-claude/pricing.md"
+    "prices_page": "https://platform.claude.com/docs/en/about-claude/pricing.md",
+    "decision_log": "docs/DECISIONS.md"
   },
   "team": {
     "_note": "The team: roles as named in the panes (session_prefix + role). coordinating: the roles that manage, not build.",
@@ -96,6 +97,7 @@
       "claude-cloud"
     ],
     "session_prefix": "agent-",
-    "legacy_prefixes": []
+    "legacy_prefixes": [],
+    "decisions_writer": "lead"
   }
 }

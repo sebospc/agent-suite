@@ -4,7 +4,7 @@ from typing import Dict
 
 class TaskClassifier(ABC):
     """Jev's judgments (design pg-o1sq Q12): raw yes probabilities that plain code turns into settings. The owner chose
-    Jev (docs/BRIEF.md), which is their yes to sending bead text, and with the design's Q4, a session's last turns."""
+    Jev (the owner's choice), which is their yes to sending bead text, and with the design's Q4, a session's last turns."""
 
     @abstractmethod
     def classify(self, bead_id: str, title: str, description: str) -> dict:

@@ -43,7 +43,7 @@ def off_milestone(ctx: NeedsContext) -> List[Need]:
     needs = []
     for holder, beads in sorted(by_holder.items()):
         listed = ", ".join(f"{b.id} ({short_name(ctx.tree.milestone_of(b))}, P{b.priority})" for b in beads)
-        prompt = (f"coordinator: {holder} holds {listed} in progress while {name} is open. By DECISIONS 2026-10-13 only P0 "
+        prompt = (f"coordinator: {holder} holds {listed} in progress while {name} is open. By the first project's decision log, 2026-10-13 only P0 "
                   f"runs outside the milestone. Please set {'it' if len(beads) == 1 else 'them'} back to open, or tell me why now.")
         needs.append(Need(f"off-{holder}", "warning",
                           f"{holder} works on {len(beads)} bead{'s' if len(beads) > 1 else ''} outside {name}: {listed}.",
@@ -84,7 +84,7 @@ def known_bead(bead: str, tree) -> bool:
 
 
 def missing_id(ctx: NeedsContext) -> List[Need]:
-    """BRIEF: if it has no id it does not exist. Bead ids against bd, "ask <6 hex>" against panel.json, "commit <sha>"
+    """The owner: if it has no id it does not exist. Bead ids against bd, "ask <6 hex>" against panel.json, "commit <sha>"
     against git: one row per session. A reply that says saved or recorded with no id at all is another row, so the
     Said vs saved light can tell the two apart. Each row quotes the reply line it came from."""
     if not ctx.tree:

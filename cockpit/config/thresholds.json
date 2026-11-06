@@ -38,12 +38,12 @@
   "keep_warm_probe_on": {
     "value": true,
     "status": "set",
-    "source": "owner 2026-10-22, panel ask 4cf900 \"A: yes, turn it on\"; when true the autopilot types one short prompt into an idle session near its cache's expiry, up to the break-even count, and only at or under probe_max_spot_multiple of its sweet spot (DECISIONS 2026-10-22 keep-warm rules)"
+    "source": "owner 2026-10-22, panel ask 4cf900 \"A: yes, turn it on\"; when true the autopilot types one short prompt into an idle session near its cache's expiry, up to the break-even count, and only at or under probe_max_spot_multiple of its sweet spot (the first project's decision log, 2026-10-22 keep-warm rules)"
   },
   "probe_max_spot_multiple": {
     "value": 1.75,
     "status": "set",
-    "source": "owner 2026-10-22 (DECISIONS keep-warm rules, e19cd7): no cache probe above this multiple of the session's sweet spot; used by the idle-cost replay and column, no probe is sent yet"
+    "source": "owner 2026-10-22 (the first project's keep-warm rules, e19cd7): no cache probe above this multiple of the session's sweet spot; used by the idle-cost replay and column, no probe is sent yet"
   },
   "probe_output_tokens": {
     "value": 20,
@@ -118,7 +118,7 @@
   "high_context_tokens": {
     "value": 150000,
     "status": "provisional",
-    "source": "docs/BRIEF.md: measured Oct 15, about 70% of token use happens above 150k context"
+    "source": "measured on the first project, Oct 15: about 70% of token use happens above 150k context"
   },
   "tokens_day_over_avg_pct": {
     "value": 20,
@@ -153,7 +153,7 @@
   "disk_min_free_gb": {
     "value": 30,
     "status": "set",
-    "source": "the project's docs/WORKFLOW.md \"Disk\" and tools/check_disk.sh: under 30 GB free no build, test run or device boot starts"
+    "source": "the first project's disk rule: under 30 GB free no build, test run or device boot starts"
   },
   "disk_watch_free_gb": {
     "value": 45,

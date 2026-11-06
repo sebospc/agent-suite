@@ -4,7 +4,7 @@ from typing import Dict
 
 class Panes(ABC):
     """A session's own terminal pane: text typed there applies exactly as if the owner typed it, and a busy session
-    runs it after its turn (the panel does the same, reference/panel/team-roadmap/hooks/register.tsx)."""
+    runs it after its turn."""
 
     @abstractmethod
     def type_into(self, pane: str, text: str) -> None:

@@ -60,7 +60,7 @@ def memory_table(rows: List[dict]) -> dict:
 
 def said_table(saved: dict) -> dict:
     measures = [("answers", "Your answers today", saved.get("answers")),
-                ("not_in_decisions", "Not in DECISIONS.md", len(saved.get("not_in_decisions", []))),
+                ("not_in_decisions", "Not in the decision log", len(saved.get("not_in_decisions", []))),
                 ("beads_opened", "Beads opened today", len(saved.get("beads_opened", []))),
                 ("commits", "Commits today", len(saved.get("commits", []))),
                 ("saved_without_id", "'Saved' with no id", sum(saved.get("without_id", {}).values())),

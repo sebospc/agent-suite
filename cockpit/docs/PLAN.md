@@ -45,7 +45,7 @@ cockpit/
   needs/                      core: each Needs you rule as one object; Handled by itself; Clear
   snapshot/                   assembles the view model; every number as {value, source, read_at, kind}
   server/                     http.server on 127.0.0.1: page, GET /api/snapshot, POST /api/asks/grill
-page/index.html, page/cockpit.css, page/cockpit.js   built from design/mockup/Main.dc.html
+page/index.html, page/cockpit.css, page/cockpit.js   built from the first project's mockup
 tests/                        unittest, against fixtures/ and fakes
 ```
 
@@ -69,7 +69,7 @@ phase 1 element needs it; tokens 24h and today vs yesterday come from transcript
 ### Tests (each rule has one that fails if the rule breaks)
 
 Transcript parsing and dedupe; context now and after a compact boundary; each of the seven checks;
-each Needs you rule; sweet spot against the verifier numbers in `research/raw/compaction-model.json`;
+each Needs you rule; sweet spot against the verifier numbers;
 Haiku grid candidate; working-on kind; drift; ask to grill question mapping; answer path calls
 `ask_owner.py answer` with the owner's words; a failing source yields unavailable, not zero.
 Fixtures I add (compact boundary transcript, cswap list, herdr pane list, grill events) are built

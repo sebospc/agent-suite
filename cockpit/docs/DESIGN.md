@@ -1,11 +1,10 @@
 # Design
 
-The mockups in `design/mockup/` are the target (`design/README.md` says how to open them). This doc
+The built page in `page/` is the target. This doc
 is the system behind them. The owner rejected the first version as "super genérico y feo" and asked
 for four anti-slop skills: Peter Yang's no-ai-slop, impeccable (pbakaus), better-ui (jakubkrehel)
 and beUI motion (starc007/ui-components), and later web-animation-skills (iart-ai) for motion. Their rules, distilled with sources:
-`research/design-rules-distilled.txt`; the audit of the first version and the proposed direction:
-`research/raw/design-skills-and-audit.json`.
+the first project's research notes (not in this repo).
 
 ## Concept: dark cockpit
 
@@ -59,7 +58,7 @@ glass, no shadows for depth (surfaces step by lightness).
 
 ## Motion (confirm an action, and show what is live)
 
-The owner reads the team by sight, before any text ("soy una persona muy visual", `BRIEF.md`), so
+The owner reads the team by sight, before any text ("soy una persona muy visual"), so
 motion carries state: something moves only while it is really happening, and stops when it stops.
 Rules from web-animation-skills (iart-ai: 60fps-animation, accessible-animation, micro-interaction).
 

@@ -18,16 +18,16 @@ PATHS = {
         "default_settings", "usage", "balancer_log", "repo", "landing_ref", "gate_logs", "team_json", "node", "grill_server",
         "grill_doc", "action_log", "learned_log", "metrics_log", "jev_record", "jev_calls", "jev_answers", "pause_file",
         "disk_volume", "saved_guard_log", "rtk_scratchpads", "context_mode_transcripts", "context_mode_sessions",
-        "config_baseline", "prices_page", "milestone_dir")},
+        "config_baseline", "prices_page", "milestone_dir", "decision_log")},
     **{key: TEXTS for key in (
         "bd_command", "ask_owner", "repos", "docs_not_describing_code", "herdr", "hook_settings", "rtk", "guarded_configs")},
     "disk_folders": NAMED_TEXTS,
     "hook_logs": NAMED_TEXTS,
 }
 TEAM = {"roles": TEXTS, "coordinating": TEXTS, "known_holders": TEXTS, "projects": NAMED_TEXTS, "session_prefix": TEXT,
-        "legacy_prefixes": TEXTS}
+        "legacy_prefixes": TEXTS, "decisions_writer": TEXT}
 SCHEMA = {"port": NUMBER, "paths": PATHS, "team": TEAM}
-OPTIONAL = {"team.projects", "team.session_prefix", "team.legacy_prefixes", "paths.claude_bin", "paths.board_dir", "paths.bd_command", "paths.panel", "paths.ask_owner", "paths.milestone_dir"}
+OPTIONAL = {"team.decisions_writer", "paths.decision_log", "team.projects", "team.session_prefix", "team.legacy_prefixes", "paths.claude_bin", "paths.board_dir", "paths.bd_command", "paths.panel", "paths.ask_owner", "paths.milestone_dir"}
 # Each pair: the first key only works with the second one set.
 NEEDS = [("paths.board_dir", "paths.bd_command"), ("paths.bd_command", "paths.board_dir"), ("paths.panel", "paths.ask_owner"),
          ("paths.ask_owner", "paths.panel"), ("paths.milestone_dir", "paths.board_dir")]

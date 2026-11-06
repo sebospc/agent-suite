@@ -40,4 +40,4 @@ Status: phase 0 scripts and the phase 1 read-only cockpit are built (`docs/PLAN.
 | `tests/` | `python3 -m unittest discover -s tests -t .` |
 | `fixtures/` | Real-format samples: panel.json, dod.json, goal.json, stack.json, beads, a transcript |
 
-Some docs mention `research/`, `reference/`, `design/` and design-history docs. Those hold one team's own data and are not part of this repo.
+The research data and the mockups the cockpit was first built from belong to the first project and are not in this repo; `research/scripts/` holds the calibration scripts.

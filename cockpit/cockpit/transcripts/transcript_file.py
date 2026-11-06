@@ -13,7 +13,7 @@ BEAD_ID = re.compile(r"\b(?:pg|mb)-[a-z0-9]{3,5}(?:\.\d+)*\b")
 ASK_ID = re.compile(r"\bask\s+((?=[0-9a-f]*\d)[0-9a-f]{6})\b", re.I)
 # Not "sha": "Patch sha c26c4e65" and "(sha 3d8db354)" are patch sha256 receipts, not commits.
 COMMIT = re.compile(r"\b(?:commit|landed|pushed)\s+((?=[0-9a-f]*\d)[0-9a-f]{7,40})\b", re.I)
-# A reply that says it saved or recorded something should name where (BRIEF: no id, it does not exist).
+# A reply that says it saved or recorded something should name where (the owner: no id, it does not exist).
 # Saving a pid or a backup records no decision, so it needs no id (brain's F19: "saved pid only").
 # ponytail: a word list; grow it when another false positive shows under Said vs saved.
 SAVED = re.compile(r"\b(?:saved|recorded|guardad[oa]s?|registrad[oa]s?)\b(?!\s+(?:(?:the|its|a|an)\s+)?(?:pid|backup|copy|screenshot)s?\b)", re.I)

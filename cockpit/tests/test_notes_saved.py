@@ -116,17 +116,18 @@ class AutopilotGuardTest(unittest.TestCase):
         # panel.json keeps the owner's exact words, so a summary loses nothing of them (panels f68cd6 to b31e2b).
         brain = autopilot_row(name="brain", notes_saved=True, unsaved_answers=["4c9041", "696253"], holds=0)
         self.assertEqual(["compact"], [c["kind"] for c in decide([brain], set(), thresholds(), NOW)])
-        self.assertEqual([], [s for s in skipped([brain], set(), thresholds(), NOW) if "DECISIONS" in s["why"]])
+        self.assertEqual([], [s for s in skipped([brain], set(), thresholds(), NOW) if "decision log" in s["why"]])
 
 
 class SnapshotWiringTest(unittest.TestCase):
-    def snapshot(self, decisions, state_file_at):
+    def snapshot(self, decisions, state_file_at, log="docs/DECISIONS.md"):
         b = builder()
+        b.decisions_writer, b.decision_log = "brain", log
         answered = [{"id": "4c9041", "answer": "yes", "text": "q", "answeredAt": "2026-10-15T23:00:00-05:00"}]
         live = [LiveSession("agent-brain", "s1", 1, "w1:p1", "15", "idle")]
         b.ports = replace(b.ports, live_sessions=FakeLiveSessions(live), asks=FakeAsks([], answered, NOW),
                           transcripts=FakeTranscripts({"s1": replace(stats(400_000), cwd="/work")}),
-                          git=FakeGit(GateState("C120", True, False, 0, 0, "t"), {}, files={"docs/DECISIONS.md": decisions}),
+                          git=FakeGit(GateState("C120", True, False, 0, 0, "t"), {}, files={"notes/LOG.md" if log != "docs/DECISIONS.md" else "docs/DECISIONS.md": decisions}),
                           role_memory=FakeRoleMemory({"brain": state_file_at}))
         return next(r for r in b.build()["sessions"] if r["name"] == "brain")
 
@@ -137,6 +138,9 @@ class SnapshotWiringTest(unittest.TestCase):
         self.assertTrue(missing["notes_saved"])
         self.assertEqual([], self.snapshot("panel 4c9041: yes", TURN_START - 100)["unsaved_answers"])
         self.assertFalse(self.snapshot("panel 4c9041: yes", TURN_START - 100)["notes_saved"])
+
+    def test_the_decision_log_is_read_where_the_config_puts_it(self):
+        self.assertEqual([], self.snapshot("panel 4c9041: yes", TURN_START + 50, log="notes/LOG.md")["unsaved_answers"])
 
 
 if __name__ == "__main__":

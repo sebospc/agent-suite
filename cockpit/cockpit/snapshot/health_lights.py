@@ -24,21 +24,21 @@ def memory_light(rows: List[dict]) -> dict:
 
 
 def said_light(saved: Optional[dict], needs: List[dict]) -> dict:
-    """What was said against what lasts: answers in DECISIONS.md, ids that exist, 'saved' with an id, the saved guard."""
-    rule = "WATCH when an answer is not in DECISIONS.md, a reply says saved with no id, names a missing id, or the guard stopped one"
+    """What was said against what lasts: answers in the decision log, ids that exist, 'saved' with an id, the saved guard."""
+    rule = "WATCH when an answer is not in the decision log, a reply says saved with no id, names a missing id, or the guard stopped one"
     saved = saved or {}
     missing = len(saved.get("not_in_decisions", []))
     no_id = sum(saved.get("without_id", {}).values())
     named = [n for n in needs if n["id"].startswith("missing-")]
     blocks = saved.get("blocks", 0)
-    problems = [p for p in (f"{missing} answer{'s' if missing != 1 else ''} not in DECISIONS.md" if missing else "",
+    problems = [p for p in (f"{missing} answer{'s' if missing != 1 else ''} not in the decision log" if missing else "",
                             f"{no_id} 'saved' with no id" if no_id else "",
                             f"{blocks} stopped by the saved guard" if blocks else "") if p]
     # Each row says which id, and quotes the reply line it came from.
     problems += [n.get("text", n["id"]).rstrip(".") for n in named]
     return light("said", "Said vs saved", f"{len(problems)} gap{'s' if len(problems) != 1 else ''}" if problems else "all saved",
                  "watch" if problems else "ok", "", "; ".join(problems) + "." if problems else "What was said today is saved with an id.",
-                 rule, "panel.json, DECISIONS.md, bd, git, transcript replies of 24 h, the saved guard's log", said_table(saved))
+                 rule, "panel.json, the decision log, bd, git, transcript replies of 24 h, the saved guard's log", said_table(saved))
 
 
 def disk_light(disk: Optional[dict], min_gb: float, watch_gb: float, error: str = "") -> dict:

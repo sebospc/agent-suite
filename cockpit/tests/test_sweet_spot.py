@@ -9,7 +9,7 @@ from cockpit.transcripts.recovery_span import RecoverySpan
 from cockpit.transcripts.session_stats import Compaction, SessionStats
 from tests.builders import prices
 
-# The verifier's worked example E1 (research/scripts/m.py, research/raw/compaction-model.json).
+# The verifier's worked example E1 (research/scripts/m.py, the first project's research data).
 E1 = SweetSpotInputs("claude-opus-5-5", 3600, P=117_212, F_s=46_630, S=20_000, T_s=0, g=2_779, g_p90=2_779,
                      y=519, q=0, kind="measured", basis="E1")
 

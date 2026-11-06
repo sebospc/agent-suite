@@ -14,11 +14,11 @@ The owner's first must have. It answers three questions, in this order:
 | Done criteria | `~/.agent-board/dod.json` → `milestones.<id>.dod` (list of bead ids), plus `changes` (dated, with the owner's words) and `bar` |
 | Found work | children labeled `nice` (not done criteria); `from:Mn` label when moved from another milestone |
 | Goal metric | `~/.agent-board/goal.json`: `{"label","value","total","target","source"}` |
-| Priority rule | DECISIONS 2026-10-13: P0 is worked at once outside milestones; P1 is `nice` in the current milestone; P2-P4 go to the next milestone |
+| Priority rule | the first project's decision log, 2026-10-13: P0 is worked at once outside milestones; P1 is `nice` in the current milestone; P2-P4 go to the next milestone |
 | Asks | `~/.agent-board/panel.json` → `asks[]` (`id`, `text`, `options`, `kind`, `by`, `asked`, `bead`, `coverage`) and `answered[]` |
-| Session list | herdr panes (see `DATA_SOURCES.md`) and the team table in the project repo `docs/WORKFLOW.md` |
+| Session list | herdr panes (see `DATA_SOURCES.md`) and the team in `.cockpit.json` |
 
-`reference/panel/team-roadmap/roadmap.py` is the panel's current logic: reuse its rules (done
+The first project's roadmap panel had this logic; the cockpit reuses its rules (done
 criteria, nice, from: labels), drop its percent bar.
 
 ## 1. The goal first

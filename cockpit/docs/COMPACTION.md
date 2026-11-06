@@ -3,7 +3,7 @@
 The owner: "(the owner's words)". This doc turns that into a
 model the cockpit computes per session from measured inputs.
 
-Sources: `research/raw/compaction-model.json` (four research lanes, a modeller and two verifiers;
+Sources: the first project's research data, not in this repo (four research lanes, a modeller and two verifiers;
 every price checked against platform.claude.com pricing on 2026-10-15). Measurement script:
 `research/scripts/measure_context.py` (output `measure_context.run3.txt`, one Opus 5.5 session at
 effort xhigh/high, 750 requests, no compactions). Verifier scripts: `research/scripts/m.py`, `idle.py`.

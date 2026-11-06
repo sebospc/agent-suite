@@ -8,7 +8,7 @@ TRUST = {"scratchpad": "not trusted", "agent memory": "that agent only, unreview
 def said_vs_saved(answers: List[dict], decisions: Optional[str], beads_opened: List[dict], commits: Optional[List[dict]],
                   claims: Dict[str, dict], errors: Dict[str, str], blocks: Optional[List[dict]] = None) -> dict:
     """What was said today against what was saved where it lasts (design chat N18): the owner's answers and whether
-    DECISIONS.md carries them, beads opened, commits landed, and replies that said saved without an id."""
+    the decision log carries them, beads opened, commits landed, and replies that said saved without an id."""
     missing = [a for a in answers if decisions is not None and a["id"] not in decisions]
     without_id = {name: c["saved"] for name, c in claims.items() if c["saved"]}
     places = Counter(place for c in claims.values() for place in c["places"])
