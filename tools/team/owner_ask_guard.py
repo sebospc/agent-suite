@@ -79,12 +79,13 @@ def panel_ids(panel_path: str) -> set:
     return {ask["id"] for ask in panel.get("asks", []) + panel.get("answered", []) if "id" in ask}
 
 
-def verdict(entries: list, known_ask_ids: set) -> str | None:
+def verdict(entries: list, known_ask_ids: set, final_reply: str = "") -> str | None:
     turn = last_turn(entries)
     if not turn or not is_from_owner(turn[0]):
         return None
     assistant_blocks = [block for entry in turn if entry.get("type") == "assistant" for block in blocks(entry)]
-    texts = [block.get("text", "") for block in assistant_blocks if block.get("type") == "text"]
+    # The hook runs before the final reply reaches the transcript; the hook input carries it.
+    texts = [block.get("text", "") for block in assistant_blocks if block.get("type") == "text"] + [final_reply]
     commands = [
         block.get("input", {}).get("command", "")
         for block in assistant_blocks
@@ -117,7 +118,7 @@ def main() -> int:
     hook = json.load(sys.stdin)
     # No stop_hook_active bypass: the session can always satisfy the guard by adding the ask or rewording.
     entries = parsed_entries(tail_lines(hook["transcript_path"], TAIL_BYTES))
-    reason = verdict(entries, panel_ids(PANEL))
+    reason = verdict(entries, panel_ids(PANEL), hook.get("last_assistant_message") or "")
     if reason:
         print(json.dumps({"decision": "block", "reason": reason}))
     return 0

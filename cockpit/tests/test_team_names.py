@@ -23,8 +23,12 @@ class TeamNamesTest(unittest.TestCase):
         self.assertEqual(self.team.session_name("ios"), "agent-ios")
 
     def test_the_board_read_keeps_beads_of_the_renamed_prefix(self):
-        export = "\n".join(json.dumps({"id": i, "title": "t", "status": "open"}) for i in ("mb-a1", "pg-a2", "x-a3"))
+        export = "\n".join(json.dumps({"id": i, "title": "t", "status": "open"}) for i in ("mb-a1", "pg-a2"))
         self.assertEqual(["mb-a1", "pg-a2"], [b.id for b in parse_beads(export)])
+
+    def test_the_board_read_keeps_beads_of_any_project_prefix(self):
+        export = "\n".join([json.dumps({"id": "rc-a3", "title": "t", "status": "open"}), json.dumps({"title": "no id"})])
+        self.assertEqual(["rc-a3"], [b.id for b in parse_beads(export)])
 
 
 if __name__ == "__main__":

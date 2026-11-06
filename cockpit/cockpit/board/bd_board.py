@@ -45,7 +45,7 @@ def parse_beads(text: str) -> List[Bead]:
             raw = json.loads(line)
         except ValueError:
             continue
-        if isinstance(raw, dict) and str(raw.get("id", "")).startswith(("mb-", "pg-")):
+        if isinstance(raw, dict) and raw.get("id"):
             beads.append(Bead.from_export(raw))
     return beads
 

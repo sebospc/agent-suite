@@ -61,6 +61,13 @@ class OwnerAskGuardTest(unittest.TestCase):
     def test_a_command_request_naming_its_panel_ask_passes(self):
         self.assertIsNone(verdict([owner("status"), reply("Next: answer panel ea59fb, A or B.")], ON_PANEL))
 
+    def test_question_in_the_final_reply_not_yet_in_the_transcript_is_blocked(self):
+        turn =[owner("status"), {"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "Bash", "input": {"command": "ls"}}]}}]
+        self.assertIsNotNone(verdict(turn, ON_PANEL, "Should workers move to 200k?"))
+
+    def test_final_reply_naming_its_panel_ask_passes(self):
+        self.assertIsNone(verdict([owner("status")], ON_PANEL, "Should workers move? On the panel as ask ea59fb."))
+
     def test_reply_with_no_question_passes(self):
         self.assertIsNone(verdict([owner("status"), reply("Pushed 4e55977f.")], ON_PANEL))
 
